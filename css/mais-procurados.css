@@ -1,0 +1,88 @@
+@import url(responsive.css);
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo Geral */
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow: auto;
+}
+
+/* Cabeçalho fixo */
+header {
+    position: fixed; /* Fixa o header na tela */
+    top: 0; /* Posiciona o header no topo da página */
+    left: 0;
+    width: 100%; /* Largura total da tela */
+    z-index: 1000; /* Garante que o header fique acima de outros elementos */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    height: 120px;
+    background-color: black; /* Fundo inicial preto */
+    transition: all 0.3s ease;
+}
+
+header.scrolled {
+    background-color: rgba(2, 2, 2, 0.8); /* Fundo com blur após rolar */
+    backdrop-filter: blur(10px);
+}
+
+header h1 {
+    color: #FFFFFF;
+    font-size: 24px;
+}
+
+header nav ul {
+    display: flex;
+}
+
+header li {
+    list-style: none;
+    margin-right: 20px;
+}
+
+li a {
+    text-decoration: none;
+    color: #b3b3b3;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+li a:hover {
+    color: #d4af37;
+}
+
+/* Animação de Escrita */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: orange; }
+}
+
+.typing-effect {
+    display: inline-block;
+    border-right: 2px solid orange;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 24px;
+    animation: typing 1s steps(20, end), blink-caret 0.3s step-end infinite;
+}
+
+.hidden {
+    display: none;
+}
+
+.svg-text {
+    /* Adicione quaisquer estilos necessários para os SVGs */
+}
