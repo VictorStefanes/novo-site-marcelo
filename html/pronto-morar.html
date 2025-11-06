@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beira Mar - Marcelo Imóveis</title>
+    <title>Pronto para Morar - Marcelo Imóveis</title>
     
     <!-- CSS Files -->
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="../css/beira-mar.css">
     <link rel="stylesheet" href="../css/filters.css">
     <link rel="stylesheet" href="../css/empty-states.css">
     <link rel="stylesheet" href="../css/dropdown.css">
@@ -50,7 +49,7 @@
     <aside class="filters-container">
         <div class="filters-header">
             <h2 class="filters-title">Filtrar Imóveis</h2>
-            <div class="section-indicator beira-mar">Beira Mar</div>
+            <div class="section-indicator pronto-morar">Pronto para Morar</div>
         </div>
 
         <div class="filters-body">
@@ -208,7 +207,7 @@
         <div class="properties-container">
             <!-- Header da Seção -->
             <div class="properties-header">
-                <h1 class="section-title-main">Imóveis na Beira Mar</h1>
+                <h1 class="section-title-main">Pronto para Morar</h1>
                 <div class="properties-count">Carregando...</div>
             </div>
 
@@ -217,7 +216,7 @@
                 <!-- Cards serão inseridos aqui via JavaScript -->
                 <div class="loading-placeholder" style="display: flex; align-items: center; justify-content: center; min-height: 200px; color: #999;">
                     <i class="fas fa-spinner fa-spin" style="margin-right: 10px;"></i>
-                    Preparando imóveis beira mar...
+                    Preparando imóveis prontos para morar...
                 </div>
             </div>
         </div>
@@ -229,9 +228,9 @@
     </button>
 
     <!-- Botão Fixo WhatsApp -->
-    <button id="whatsappFixedBtn" class="whatsapp-fixed-btn" onclick="openWhatsAppWithMessage('Olá! Tenho muito interesse em imóveis na Beira Mar. Podem me mostrar as opções disponíveis com vista para o mar?')" title="Falar no WhatsApp sobre Beira Mar">
+    <button id="whatsappFixedBtn" class="whatsapp-fixed-btn" onclick="openWhatsAppWithMessage('Olá! Tenho interesse em imóveis prontos para morar. Podem me mostrar as opções disponíveis?')" title="Falar no WhatsApp sobre Pronto para Morar">
         <i class="fab fa-whatsapp"></i>
-        <span class="whatsapp-text">Imóveis Beira Mar</span>
+        <span class="whatsapp-text">Pronto para Morar</span>
         <div class="whatsapp-pulse"></div>
     </button>
 
@@ -409,6 +408,11 @@
             .whatsapp-text {
                 display: none;
             }
+        }
+
+        .section-indicator.pronto-morar {
+            background: linear-gradient(135deg, #2e8b57 0%, #3cb371 100%);
+            color: white;
         }
     </style>
 
