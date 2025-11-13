@@ -246,6 +246,13 @@
     color: #000;
 }
 
+/* Garantir que os botões tenham tamanho consistente */
+.filter-actions .filter-btn {
+    width: 100% !important;
+    flex: none !important;
+    display: block !important;
+}
+
 /* Toggle para mobile */
 .filter-toggle {
     display: none;

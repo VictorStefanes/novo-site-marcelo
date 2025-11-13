@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="../css/filters.css">
     <link rel="stylesheet" href="../css/empty-states.css">
     <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/mobile-menu.css">
+    <link rel="stylesheet" href="../css/fixed-buttons.css">
+    <link rel="stylesheet" href="../css/property-cards.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
@@ -19,11 +22,18 @@
 <body>
     <!-- Header -->
     <header>
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        
         <h1 id="animated-heading">
             <img id="svg1" src="../assets/svg/1.svg" alt="Escrita 1" class="hidden svg-text">
             <img id="svg2" src="../assets/svg/2.svg" alt="Escrita 2" class="hidden svg-text">
         </h1>
-        <nav>
+        <nav id="mainNav">
             <ul>
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="#sobre">Sobre</a></li>
@@ -33,7 +43,6 @@
                         <a href="lancamentos.html">Lançamentos</a>
                         <a href="mais-procurados.html">Mais Procurados</a>
                         <a href="beira-mar.html">Beira Mar</a>
-                        <a href="pronto-morar.html">Pronto para Morar</a>
                     </div>
                 </li>
                 <li><a href="#contato">Contato</a></li>
@@ -197,7 +206,7 @@
             <button id="aplicarFiltros" class="filter-btn primary">
                 <i class="fas fa-search"></i> Aplicar Filtros
             </button>
-            <button id="limparFiltros" class="filter-btn secondary">
+            <button id="limparFiltros" class="clear-filters-btn filter-btn secondary">
                 <i class="fas fa-eraser"></i> Limpar Filtros
             </button>
         </div>
@@ -414,10 +423,7 @@
 
     <!-- Scripts -->
     <script src="../js/script.js"></script>
-    <script src="../js/scripts.js"></script>
-    <script src="../js/dashboard-api.js"></script>
-    <script src="../js/integrated-property-loader.js"></script>
-    <script src="../js/filters.js"></script>
+    <script src="../js/price-filters.js"></script>
     
     <script>
         function openWhatsAppWithMessage(message) {
@@ -446,7 +452,75 @@
         
         // Add scroll event listener
         window.addEventListener('scroll', toggleScrollButton);
+        
+        // Mobile Menu Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mainNav = document.getElementById('mainNav');
+            let overlay = null;
+            
+            if (mobileMenuToggle && mainNav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    const isOpen = mainNav.classList.contains('open');
+                    
+                    if (isOpen) {
+                        closeMobileMenu();
+                    } else {
+                        openMobileMenu();
+                    }
+                });
+                
+                function openMobileMenu() {
+                    mainNav.classList.add('open');
+                    mobileMenuToggle.classList.add('active');
+                    
+                    // Create overlay
+                    overlay = document.createElement('div');
+                    overlay.className = 'mobile-overlay active';
+                    document.body.appendChild(overlay);
+                    
+                    // Close menu when clicking overlay
+                    overlay.addEventListener('click', closeMobileMenu);
+                    
+                    // Prevent body scroll
+                    document.body.style.overflow = 'hidden';
+                }
+                
+                function closeMobileMenu() {
+                    mainNav.classList.remove('open');
+                    mobileMenuToggle.classList.remove('active');
+                    
+                    if (overlay) {
+                        overlay.remove();
+                        overlay = null;
+                    }
+                    
+                    // Restore body scroll
+                    document.body.style.overflow = '';
+                }
+                
+                // Close menu when clicking nav links
+                const navLinks = mainNav.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', closeMobileMenu);
+                });
+                
+                // Handle dropdown in mobile
+                const dropdown = document.querySelector('.dropdown');
+                if (dropdown) {
+                    dropdown.addEventListener('click', function(e) {
+                        if (window.innerWidth <= 768) {
+                            e.preventDefault();
+                            this.classList.toggle('active');
+                        }
+                    });
+                }
+            }
+        });
     </script>
+
+    <!-- Sistema de Busca de Propriedades -->
+    <script src="../js/property-search.js"></script>
 </body>
 
 </html>

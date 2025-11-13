@@ -1,0 +1,506 @@
+/* Property Cards System */
+
+.property-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    height: auto;
+    min-height: 500px;
+}
+
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.property-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.property-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.property-card:hover .property-image img {
+    transform: scale(1.05);
+}
+
+.property-category {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+    z-index: 2;
+}
+
+.property-category.mais-procurados {
+    background: linear-gradient(135deg, #d4af37 0%, #f1d366 100%);
+}
+
+.property-category.lancamentos {
+    background: linear-gradient(135deg, #2a6496 0%, #4a90e2 100%);
+}
+
+.property-category.beira-mar {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.property-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.property-title h3 {
+    color: #333;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.property-location {
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.property-location i {
+    color: #d4af37;
+}
+
+.property-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 15px 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.feature i {
+    color: #d4af37;
+    width: 16px;
+    text-align: center;
+}
+
+.property-price {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.property-price h3 {
+    color: #d4af37;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+}
+
+.price-type {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.property-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.btn-contact {
+    flex: 1;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-contact:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.btn-favorite {
+    width: 45px;
+    height: 45px;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-favorite:hover {
+    background: #fff5f5;
+    border-color: #d4af37;
+    color: #d4af37;
+}
+
+/* Empty State */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state-icon {
+    font-size: 4rem;
+    color: #d4af37;
+    margin-bottom: 2rem;
+    opacity: 0.7;
+}
+
+.empty-state-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.empty-state-message {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.5;
+    max-width: 400px;
+    margin: 0 auto 2rem;
+}
+
+.empty-state-cta {
+    background: linear-gradient(135deg, #d4af37 0%, #f1d366 100%);
+    color: #1a1a1a;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+}
+
+.empty-state-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+}
+
+/* Loading State */
+.loading-placeholder {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #999;
+    font-size: 1.1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.loading-placeholder i {
+    margin-right: 10px;
+    animation: spin 1s linear infinite;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .property-card {
+        min-height: auto;
+    }
+    
+    .property-image {
+        height: 200px;
+    }
+    
+    .property-content {
+        padding: 15px;
+        gap: 12px;
+    }
+    
+    .property-title h3 {
+        font-size: 1.1rem;
+    }
+    
+    .property-features {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .property-price h3 {
+        font-size: 1.3rem;
+    }
+    
+    .btn-contact {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-favorite {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .property-actions {
+        flex-direction: column;
+    }
+    
+    .btn-favorite {
+        width: 100%;
+        height: 45px;
+    }
+}
+
+/* Property Details Links */
+
+.property-link {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 600;
+}
+
+/* Premium Card Enhancements */
+.premium-card {
+    position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.premium-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.18);
+}
+
+.property-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 3;
+    animation: pulse 2s infinite;
+}
+
+.property-discount {
+    position: absolute;
+    top: 50px;
+    right: 12px;
+    background: linear-gradient(135deg, #2ed573, #7bed9f);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    z-index: 3;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.property-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.highlight-item {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.highlight-item i {
+    font-size: 0.7rem;
+}
+
+.price-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.old-price {
+    color: #999;
+    font-size: 0.9rem;
+    text-decoration: line-through;
+    margin-bottom: 0.25rem;
+}
+
+.current-price {
+    color: #2ed573;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(135deg, #2ed573, #7bed9f);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.property-link:hover {
+    color: #667eea;
+}
+
+.property-code {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: normal;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.btn-details {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.btn-details:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+/* ========================================
+   SPECIFIC CARD TYPES STYLING
+======================================== */
+
+/* PREMIUM CARD (Lançamentos) */
+.premium-card {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.05) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+}
+
+.premium-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.3);
+    border-color: rgba(212, 175, 55, 0.5);
+}
+
+/* POPULAR CARD (Mais Procurados) */
+.popular-card {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.1) 0%, rgba(243, 156, 18, 0.05) 100%);
+    border: 2px solid rgba(243, 156, 18, 0.3);
+    box-shadow: 0 8px 25px rgba(243, 156, 18, 0.2);
+}
+
+.popular-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(243, 156, 18, 0.3);
+    border-color: rgba(243, 156, 18, 0.5);
+}
+
+.popular-card .property-views {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(243, 156, 18, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    animation: pulse 2s infinite;
+}
+
+/* READY CARD (Pronto para Morar) */
+.ready-card {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.1) 0%, rgba(39, 174, 96, 0.05) 100%);
+    border: 2px solid rgba(39, 174, 96, 0.3);
+    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.2);
+}
+
+.ready-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(39, 174, 96, 0.3);
+    border-color: rgba(39, 174, 96, 0.5);
+}
+
+.ready-card .property-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(39, 174, 96, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* CATEGORIES STYLING */
+.property-category.pronto-morar {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+}

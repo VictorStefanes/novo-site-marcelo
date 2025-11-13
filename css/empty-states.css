@@ -30,22 +30,7 @@
     max-width: 400px;
 }
 
-.empty-state-cta {
-    background: linear-gradient(135deg, #d4af37 0%, #f1d366 100%);
-    color: #1a1a1a;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-top: 1.5rem;
-    transition: all 0.3s ease;
-}
-
-.empty-state-cta:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
-}
+/* Estilos do botão CTA movidos para property-cards.css para evitar duplicação */
 
 /* Loading States */
 .loading-placeholder {
