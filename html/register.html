@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Criar Conta - Marcelo Imóveis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .register-header h1 {
+            color: #d4af37;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .register-header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #d4af37;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #d4af37, #f4d03f);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .login-link a {
+            color: #d4af37;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #f4d03f;
+        }
+
+        .auth-message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .auth-message-error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+            color: #ff6b6b;
+        }
+
+        .auth-message-success {
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.5);
+            color: #2ecc71;
+        }
+
+        .auth-message-info {
+            background: rgba(52, 152, 219, 0.2);
+            border: 1px solid rgba(52, 152, 219, 0.5);
+            color: #3498db;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            color: white;
+        }
+
+        .loading-spinner i {
+            font-size: 3rem;
+            color: #d4af37;
+            margin-bottom: 1rem;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .strength-indicator {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+
+        .strength-bar {
+            height: 100%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .strength-weak { background: #e74c3c; width: 25%; }
+        .strength-fair { background: #f39c12; width: 50%; }
+        .strength-good { background: #f1c40f; width: 75%; }
+        .strength-strong { background: #27ae60; width: 100%; }
+
+        @media (max-width: 768px) {
+            .register-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .register-header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1><i class="fas fa-user-plus"></i> Criar Conta</h1>
+            <p>Junte-se ao Marcelo Imóveis</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="name">
+                    <i class="fas fa-user"></i> Nome Completo
+                </label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    class="form-input" 
+                    placeholder="Digite seu nome completo"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i> Email
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="Digite seu email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock"></i> Senha
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Digite sua senha"
+                    required
+                    minlength="6"
+                >
+                <div class="password-strength">
+                    <div class="strength-indicator">
+                        <div class="strength-bar" id="strengthBar"></div>
+                    </div>
+                    <span id="strengthText">Digite uma senha forte</span>
+                </div>
+            </div>
+
+            <button type="submit" id="registerButton" class="register-btn">
+                <i class="fas fa-user-plus"></i> Criar Conta
+            </button>
+        </form>
+
+        <div class="login-link">
+            <p style="color: rgba(255, 255, 255, 0.7);">
+                Já tem uma conta? 
+                <a href="login.html">
+                    <i class="fas fa-sign-in-alt"></i> Fazer Login
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Criando sua conta...</p>
+        </div>
+    </div>
+
+    <script>
+        class RegisterManager {
+            constructor() {
+                this.form = document.getElementById('registerForm');
+                this.submitButton = document.getElementById('registerButton');
+                this.loadingOverlay = document.getElementById('loadingOverlay');
+                this.passwordInput = document.getElementById('password');
+                this.strengthBar = document.getElementById('strengthBar');
+                this.strengthText = document.getElementById('strengthText');
+                
+                this.init();
+            }
+
+            init() {
+                this.form.addEventListener('submit', (e) => this.handleRegister(e));
+                this.passwordInput.addEventListener('input', () => this.checkPasswordStrength());
+            }
+
+            // Verificar força da senha
+            checkPasswordStrength() {
+                const password = this.passwordInput.value;
+                let strength = 0;
+                let text = '';
+                let className = '';
+
+                if (password.length >= 6) strength++;
+                if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+                if (password.match(/\d/)) strength++;
+                if (password.match(/[^a-zA-Z\d]/)) strength++;
+
+                switch (strength) {
+                    case 0:
+                    case 1:
+                        text = 'Senha muito fraca';
+                        className = 'strength-weak';
+                        break;
+                    case 2:
+                        text = 'Senha fraca';
+                        className = 'strength-fair';
+                        break;
+                    case 3:
+                        text = 'Senha boa';
+                        className = 'strength-good';
+                        break;
+                    case 4:
+                        text = 'Senha forte';
+                        className = 'strength-strong';
+                        break;
+                }
+
+                this.strengthBar.className = `strength-bar ${className}`;
+                this.strengthText.textContent = text;
+            }
+
+            // Processar registro
+            async handleRegister(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this.form);
+                const name = formData.get('name').trim();
+                const email = formData.get('email').trim();
+                const password = formData.get('password');
+
+                // Validações
+                if (!name || !email || !password) {
+                    this.showMessage('Todos os campos são obrigatórios', 'error');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    this.showMessage('Senha deve ter pelo menos 6 caracteres', 'error');
+                    return;
+                }
+
+                this.setLoading(true);
+
+                try {
+                    const response = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ name, email, password })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Criar sessão local
+                        const session = {
+                            user: data.user,
+                            token: data.token,
+                            expires: new Date().getTime() + (24 * 60 * 60 * 1000),
+                            created: new Date().toISOString(),
+                            isValid: true
+                        };
+
+                        localStorage.setItem('marceloImoveis_session', JSON.stringify(session));
+
+                        this.showMessage('✅ Conta criada com sucesso! Email enviado. Redirecionando...', 'success');
+                        
+                        // Redirecionar após sucesso
+                        setTimeout(() => {
+                            window.location.href = data.redirect || 'dashboard.html';
+                        }, 2000);
+
+                    } else {
+                        this.showMessage(data.message, 'error');
+                    }
+
+                } catch (error) {
+                    console.error('Erro no registro:', error);
+                    this.showMessage('Erro de conexão. Tente novamente.', 'error');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+
+            // Mostrar loading
+            setLoading(loading) {
+                if (loading) {
+                    this.loadingOverlay.style.display = 'flex';
+                    this.submitButton.disabled = true;
+                    this.submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Criando...';
+                } else {
+                    this.loadingOverlay.style.display = 'none';
+                    this.submitButton.disabled = false;
+                    this.submitButton.innerHTML = '<i class="fas fa-user-plus"></i> Criar Conta';
+                }
+            }
+
+            // Mostrar mensagem
+            showMessage(message, type = 'info') {
+                // Remover mensagem existente
+                const existingMessage = document.querySelector('.auth-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                // Criar nova mensagem
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `auth-message auth-message-${type}`;
+                messageDiv.innerHTML = `
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                `;
+
+                // Inserir antes do formulário
+                this.form.parentNode.insertBefore(messageDiv, this.form);
+
+                // Remover após 5 segundos (exceto sucesso)
+                if (type !== 'success') {
+                    setTimeout(() => {
+                        if (messageDiv.parentNode) {
+                            messageDiv.remove();
+                        }
+                    }, 5000);
+                }
+            }
+        }
+
+        // Inicializar quando DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            new RegisterManager();
+            console.log('📝 Sistema de registro inicializado');
+        });
+    </script>
+</body>
+</html>
