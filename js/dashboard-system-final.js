@@ -42,6 +42,9 @@ class DashboardSystemFinal {
         this.initImageUpload();
         this.setupEventListeners();
         this.setupModalHandlers();
+        
+        // Carrega imóveis para a tabela
+        this.loadPropertiesTable();
     }
 
     addNameAttributesToFormFields() {
@@ -269,6 +272,9 @@ class DashboardSystemFinal {
                 this.form.reset();
                 this.closeModal();
                 
+                // Recarregar tabela do dashboard
+                this.loadPropertiesTable();
+                
                 // Recarregar propriedades se o sistema estiver disponível
                 if (this.propertySystem && typeof this.propertySystem.loadProperties === 'function') {
                     setTimeout(() => this.propertySystem.loadProperties(), 500);
@@ -386,6 +392,212 @@ class DashboardSystemFinal {
                 notification.remove();
             }
         }, 5000);
+    }
+
+    // ========================================
+    // GESTÃO DA TABELA DE IMÓVEIS
+    // ========================================
+
+    async loadPropertiesTable() {
+        try {
+            const response = await fetch(`${window.API_URL}/api/properties`);
+            
+            if (!response.ok) {
+                throw new Error('Erro ao carregar imóveis');
+            }
+            
+            const properties = await response.json();
+            this.renderPropertiesTable(properties);
+            
+        } catch (error) {
+            console.error('❌ Erro ao carregar tabela de imóveis:', error);
+            this.showEmptyState();
+        }
+    }
+
+    renderPropertiesTable(properties) {
+        const tbody = document.getElementById('propertiesTableBody');
+        const emptyState = document.getElementById('propertiesEmptyState');
+        
+        if (!tbody) return;
+
+        if (!properties || properties.length === 0) {
+            tbody.innerHTML = '';
+            if (emptyState) emptyState.style.display = 'flex';
+            return;
+        }
+
+        if (emptyState) emptyState.style.display = 'none';
+
+        tbody.innerHTML = properties.map(property => {
+            const statusClass = this.getStatusClass(property.status);
+            const statusLabel = this.getStatusLabel(property.status);
+            
+            return `
+                <tr data-property-id="${property.id}">
+                    <td>
+                        <div class="property-info">
+                            <img src="${this.getPropertyImage(property)}" alt="${property.title}" class="property-thumb">
+                            <div>
+                                <strong>${property.title}</strong>
+                                <small>Cód: ${property.id}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${property.property_type || 'N/A'}</td>
+                    <td><span class="category-badge ${property.category}">${this.getCategoryLabel(property.category)}</span></td>
+                    <td><strong>${this.formatCurrency(property.price)}</strong></td>
+                    <td>${property.neighborhood || 'N/A'}, ${property.city || 'N/A'}</td>
+                    <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-action btn-edit" onclick="window.dashboardSystem.editProperty(${property.id})" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-action btn-status" onclick="window.dashboardSystem.togglePropertyStatus(${property.id})" title="Mudar Status">
+                                <i class="fas fa-toggle-on"></i>
+                            </button>
+                            <button class="btn-action btn-delete" onclick="window.dashboardSystem.deleteProperty(${property.id})" title="Excluir">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    getPropertyImage(property) {
+        if (property.images && property.images.length > 0) {
+            return property.images[0].url || '/assets/images/property-placeholder.jpg';
+        }
+        return '/assets/images/property-placeholder.jpg';
+    }
+
+    getCategoryLabel(category) {
+        const labels = {
+            'lancamentos': 'Lançamentos',
+            'beira-mar': 'Beira-Mar',
+            'mais-procurados': 'Mais Procurados',
+            'pronto-morar': 'Pronto p/ Morar'
+        };
+        return labels[category] || category;
+    }
+
+    getStatusClass(status) {
+        const classes = {
+            'active': 'status-active',
+            'sold': 'status-sold',
+            'reserved': 'status-reserved',
+            'pending': 'status-pending'
+        };
+        return classes[status] || 'status-active';
+    }
+
+    getStatusLabel(status) {
+        const labels = {
+            'active': 'Disponível',
+            'sold': 'Vendido',
+            'reserved': 'Reservado',
+            'pending': 'Em Espera'
+        };
+        return labels[status] || status;
+    }
+
+    formatCurrency(value) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value || 0);
+    }
+
+    showEmptyState() {
+        const tbody = document.getElementById('propertiesTableBody');
+        const emptyState = document.getElementById('propertiesEmptyState');
+        
+        if (tbody) tbody.innerHTML = '';
+        if (emptyState) emptyState.style.display = 'flex';
+    }
+
+    // Editar imóvel
+    async editProperty(id) {
+        try {
+            const response = await fetch(`${window.API_URL}/api/properties/${id}`);
+            const property = await response.json();
+            
+            // Preenche o formulário com os dados
+            Object.keys(property).forEach(key => {
+                const field = this.form.querySelector(`[name="${key}"]`);
+                if (field) {
+                    field.value = property[key];
+                }
+            });
+            
+            // Armazena ID para update
+            this.form.dataset.editingId = id;
+            this.openModal();
+            
+        } catch (error) {
+            console.error('Erro ao carregar imóvel:', error);
+            this.showNotification('Erro ao carregar imóvel', 'error');
+        }
+    }
+
+    // Alternar status do imóvel
+    async togglePropertyStatus(id) {
+        const statuses = ['active', 'reserved', 'pending', 'sold'];
+        
+        try {
+            // Buscar status atual
+            const response = await fetch(`${window.API_URL}/api/properties/${id}`);
+            const property = await response.json();
+            
+            // Próximo status
+            const currentIndex = statuses.indexOf(property.status);
+            const nextStatus = statuses[(currentIndex + 1) % statuses.length];
+            
+            // Atualizar
+            const updateResponse = await fetch(`${window.API_URL}/api/properties/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ status: nextStatus })
+            });
+            
+            if (!updateResponse.ok) throw new Error('Erro ao atualizar status');
+            
+            this.showNotification('Status atualizado com sucesso!', 'success');
+            this.loadPropertiesTable();
+            
+        } catch (error) {
+            console.error('Erro ao alterar status:', error);
+            this.showNotification('Erro ao alterar status', 'error');
+        }
+    }
+
+    // Excluir imóvel
+    async deleteProperty(id) {
+        if (!confirm('Tem certeza que deseja excluir este imóvel?')) return;
+        
+        try {
+            const response = await fetch(`${window.API_URL}/api/properties/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            
+            if (!response.ok) throw new Error('Erro ao excluir');
+            
+            this.showNotification('Imóvel excluído com sucesso!', 'success');
+            this.loadPropertiesTable();
+            
+        } catch (error) {
+            console.error('Erro ao excluir imóvel:', error);
+            this.showNotification('Erro ao excluir imóvel', 'error');
+        }
     }
 }
 
