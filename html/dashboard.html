@@ -85,11 +85,33 @@
                 <p class="page-subtitle">Painel de controle administrativo</p>
             </div>
             <div class="header-right">
-                <div class="user-info">
+                <div class="user-info" onclick="toggleUserMenu()">
                     <span class="user-name">Administrador</span>
                     <div class="user-avatar">
                         <i class="fas fa-user"></i>
                     </div>
+                    <i class="fas fa-chevron-down" style="margin-left: 0.5rem; font-size: 0.75rem; color: var(--gray);"></i>
+                </div>
+                <!-- User Dropdown Menu -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <div class="user-menu-header">
+                        <div class="user-avatar-small">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <strong class="user-menu-name">Administrador</strong>
+                            <small class="user-menu-email">admin@exemplo.com</small>
+                        </div>
+                    </div>
+                    <div class="user-menu-divider"></div>
+                    <a href="#" class="user-menu-item" onclick="event.preventDefault(); window.location.href='../index.html'">
+                        <i class="fas fa-home"></i>
+                        <span>Ir para o Site</span>
+                    </a>
+                    <a href="#" class="user-menu-item" onclick="event.preventDefault(); handleLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
+                    </a>
                 </div>
             </div>
         </header>
@@ -974,6 +996,73 @@
                 sidebarToggle.addEventListener('click', function() {
                     sidebar.classList.toggle('collapsed');
                 });
+            }
+        });
+
+        // ========================================
+        // SISTEMA DE LOGOUT E MENU DO USUÁRIO
+        // ========================================
+
+        function toggleUserMenu() {
+            const userMenu = document.getElementById('userMenu');
+            if (userMenu) {
+                userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                // Limpar localStorage
+                localStorage.removeItem('marceloImoveis_session');
+                localStorage.removeItem('token');
+                
+                // Redirecionar para login
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            const userInfo = document.querySelector('.user-info');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenu && userInfo) {
+                if (!userInfo.contains(event.target) && !userMenu.contains(event.target)) {
+                    userMenu.style.display = 'none';
+                }
+            }
+        });
+
+        // Atualizar informações do usuário no menu
+        window.addEventListener('load', function() {
+            const session = localStorage.getItem('marceloImoveis_session');
+            if (session) {
+                try {
+                    const sessionData = JSON.parse(session);
+                    const user = sessionData.user;
+                    
+                    // Atualizar nome no header
+                    const userNameElements = document.querySelectorAll('.user-name');
+                    userNameElements.forEach(el => {
+                        if (user && user.name) {
+                            el.textContent = user.name;
+                        }
+                    });
+                    
+                    // Atualizar email no menu
+                    const menuName = document.querySelector('.user-menu-name');
+                    const menuEmail = document.querySelector('.user-menu-email');
+                    
+                    if (menuName && user && user.name) {
+                        menuName.textContent = user.name;
+                    }
+                    
+                    if (menuEmail && user && user.email) {
+                        menuEmail.textContent = user.email;
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar dados do usuário:', error);
+                }
             }
         });
     </script>

@@ -135,18 +135,26 @@ class AuthManager {
             loginTime: new Date().toISOString()
         };
         
+        const jwtToken = token || this.generateToken();
+        
         const session = {
             user: user,
-            token: token || this.generateToken(),
+            token: jwtToken,
             expires: new Date().getTime() + (24 * 60 * 60 * 1000), // 24 horas
             created: new Date().toISOString(),
             isValid: true
         };
         
+        // Salvar sessão completa
         localStorage.setItem(this.sessionKey, JSON.stringify(session));
+        
+        // Salvar token JWT separadamente para facilitar acesso
+        localStorage.setItem('token', jwtToken);
+        
         this.currentUser = user;
         
         console.log('✅ Sessão criada para:', user.name);
+        console.log('🔑 Token JWT salvo:', jwtToken.substring(0, 20) + '...');
     }
 
     // Gerar token simples
@@ -168,13 +176,37 @@ class AuthManager {
     // Limpar sessão
     clearSession() {
         localStorage.removeItem(this.sessionKey);
+        localStorage.removeItem('token');
         this.currentUser = null;
+        console.log('🔓 Sessão limpa');
     }
 
     // Fazer logout
     logout() {
         this.clearSession();
         this.redirectToLogin();
+    }
+
+    // Obter token JWT
+    getToken() {
+        const token = localStorage.getItem('token');
+        if (token) {
+            return token;
+        }
+        
+        // Fallback: tentar obter da sessão
+        const session = localStorage.getItem(this.sessionKey);
+        if (session) {
+            try {
+                const sessionData = JSON.parse(session);
+                return sessionData.token;
+            } catch (error) {
+                console.error('Erro ao obter token:', error);
+                return null;
+            }
+        }
+        
+        return null;
     }
 
     // Verificar se usuário está autenticado

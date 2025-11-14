@@ -206,6 +206,15 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.user-info:hover {
+    background: rgba(212, 175, 55, 0.1);
 }
 
 .user-name {
@@ -223,6 +232,97 @@ body {
     justify-content: center;
     color: var(--white);
     font-size: 1.1rem;
+}
+
+/* User Dropdown Menu */
+.user-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: rgba(0, 0, 0, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    min-width: 250px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+.user-menu-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.user-avatar-small {
+    width: 45px;
+    height: 45px;
+    background: var(--secondary-gradient);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 1.25rem;
+}
+
+.user-menu-name {
+    display: block;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+}
+
+.user-menu-email {
+    display: block;
+    color: var(--gray);
+    font-size: 0.8rem;
+}
+
+.user-menu-divider {
+    height: 1px;
+    background: rgba(212, 175, 55, 0.2);
+    margin: 0.5rem 0;
+}
+
+.user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    color: var(--white);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.user-menu-item:hover {
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.user-menu-item i {
+    font-size: 1.1rem;
+    color: var(--accent-color);
+    width: 20px;
+    text-align: center;
+}
+
+.user-menu-item span {
+    font-size: 0.9rem;
+}
+
+.user-menu-item:last-child {
+    border-radius: 0 0 12px 12px;
+}
+
+.user-menu-item:last-child:hover {
+    background: rgba(244, 67, 54, 0.1);
+}
+
+.user-menu-item:last-child i {
+    color: #e57373;
 }
 
 /* ========================================
