@@ -233,10 +233,11 @@ class DashboardSystemFinal {
                 virtual_tour_url: rawData.virtual_tour_url
             };
 
-            // Adicionar imagens do sistema de upload
-            if (this.imageUpload && this.imageUpload.selectedImages && this.imageUpload.selectedImages.length > 0) {
-                propertyData.images = this.imageUpload.selectedImages;
-                console.log('🖼️ Imagens anexadas:', propertyData.images.length);
+            // Adicionar imagens do sistema de upload (converter para base64)
+            if (window.imageUploadSystem && window.imageUploadSystem.selectedImages.length > 0) {
+                console.log('🖼️ Convertendo imagens para base64...');
+                propertyData.images = await window.imageUploadSystem.convertImagesToBase64();
+                console.log('✅ Imagens anexadas:', propertyData.images.length);
             } else {
                 propertyData.images = [];
                 console.log('📷 Nenhuma imagem anexada');

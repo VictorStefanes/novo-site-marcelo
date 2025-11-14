@@ -314,19 +314,43 @@ class PropertySystemFinal {
             category = this.currentCategory
         } = property;
 
-        // Usar primeira imagem ou placeholder
-        const imageUrl = images.length > 0 && images[0].url ? 
-            images[0].url : 
-            '/assets/images/property-placeholder.jpg';
-
         const finalidade = this.mapPriceType(price_type);
         const categoryName = this.getCategoryName(category);
 
+        // Preparar imagens para o carrossel
+        const propertyImages = images && images.length > 0 ? images : [{data: '/assets/images/property-placeholder.jpg'}];
+        const imagesHTML = propertyImages.map((img, index) => {
+            const imgSrc = img.data || img.url || '/assets/images/property-placeholder.jpg';
+            return `
+                <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-slide="${index}">
+                    <img src="${imgSrc}" alt="${title} - Foto ${index + 1}" loading="lazy" 
+                         onerror="this.src='/assets/images/property-placeholder.jpg'">
+                </div>
+            `;
+        }).join('');
+
+        // Controles do carrossel (só aparecem se houver mais de 1 imagem)
+        const carouselControls = propertyImages.length > 1 ? `
+            <button class="carousel-btn carousel-prev" onclick="event.stopPropagation(); window.propertySystem.prevSlide(${id})">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn carousel-next" onclick="event.stopPropagation(); window.propertySystem.nextSlide(${id})">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="carousel-indicators">
+                ${propertyImages.map((_, index) => `
+                    <span class="indicator ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>
+                `).join('')}
+            </div>
+        ` : '';
+
         return `
             <div class="property-card" data-property-id="${id}">
-                <div class="property-image">
-                    <img src="${imageUrl}" alt="${title}" loading="lazy" 
-                         onerror="this.src='/assets/images/property-placeholder.jpg'">
+                <div class="property-image-carousel">
+                    <div class="carousel-container">
+                        ${imagesHTML}
+                    </div>
+                    ${carouselControls}
                     <div class="property-category ${category}">${categoryName}</div>
                 </div>
                 <div class="property-content">
@@ -464,6 +488,48 @@ class PropertySystemFinal {
     async refresh() {
         await this.loadProperties();
         this.applyFilters();
+    }
+
+    // ========================================
+    // CONTROLES DO CARROSSEL DE IMAGENS
+    // ========================================
+
+    nextSlide(propertyId) {
+        const card = document.querySelector(`[data-property-id="${propertyId}"]`);
+        if (!card) return;
+
+        const slides = card.querySelectorAll('.carousel-slide');
+        const indicators = card.querySelectorAll('.indicator');
+        const activeSlide = card.querySelector('.carousel-slide.active');
+        const activeIndex = parseInt(activeSlide.dataset.slide);
+        const nextIndex = (activeIndex + 1) % slides.length;
+
+        // Atualizar slides
+        activeSlide.classList.remove('active');
+        slides[nextIndex].classList.add('active');
+
+        // Atualizar indicadores
+        indicators.forEach(ind => ind.classList.remove('active'));
+        indicators[nextIndex].classList.add('active');
+    }
+
+    prevSlide(propertyId) {
+        const card = document.querySelector(`[data-property-id="${propertyId}"]`);
+        if (!card) return;
+
+        const slides = card.querySelectorAll('.carousel-slide');
+        const indicators = card.querySelectorAll('.indicator');
+        const activeSlide = card.querySelector('.carousel-slide.active');
+        const activeIndex = parseInt(activeSlide.dataset.slide);
+        const prevIndex = activeIndex === 0 ? slides.length - 1 : activeIndex - 1;
+
+        // Atualizar slides
+        activeSlide.classList.remove('active');
+        slides[prevIndex].classList.add('active');
+
+        // Atualizar indicadores
+        indicators.forEach(ind => ind.classList.remove('active'));
+        indicators[prevIndex].classList.add('active');
     }
 }
 
