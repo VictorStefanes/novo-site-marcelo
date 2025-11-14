@@ -1,0 +1,40 @@
+/* ========================================
+   OVERRIDE PARA REMOVER ESTILOS CONFLITANTES
+   Remove estilos que estão interferindo no dourado
+======================================== */
+
+/* Remove estilos de property-cards.css que estão conflitando */
+.premium-card,
+.popular-card,
+.ready-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%) !important;
+    border: 2px solid rgba(212, 175, 55, 0.3) !important;
+    box-shadow: 
+        0 8px 25px rgba(212, 175, 55, 0.15),
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+.premium-card:hover,
+.popular-card:hover,
+.ready-card:hover {
+    transform: translateY(-8px) scale(1.02) !important;
+    border-color: rgba(212, 175, 55, 0.6) !important;
+    box-shadow: 
+        0 15px 40px rgba(212, 175, 55, 0.25),
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Remove bordas coloridas específicas */
+.premium-card {
+    border-color: rgba(212, 175, 55, 0.4) !important;
+}
+
+.popular-card {
+    border-color: rgba(212, 175, 55, 0.4) !important;
+}
+
+.ready-card {
+    border-color: rgba(212, 175, 55, 0.4) !important;
+}

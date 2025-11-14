@@ -1,0 +1,248 @@
+/* ========================================
+   CORREÇÕES DOS FILTROS - ESTILOS REFINADOS
+======================================== */
+
+/* Corrigir peso das fontes dos títulos h3 */
+.filter-group h3 {
+    color: #d4af37 !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 12px !important;
+    font-weight: 500 !important; /* Menos grosso que o padrão */
+    font-family: "Space Grotesk", sans-serif !important;
+}
+
+/* Corrigir texto dos labels - garantir cor clara e peso normal */
+.filter-label {
+    display: flex !important;
+    align-items: center !important;
+    color: #e0e0e0 !important; /* Cor clara para o texto no fundo preto */
+    margin-bottom: 8px !important;
+    cursor: pointer !important;
+    transition: color 0.3s ease !important;
+    line-height: 1.5 !important;
+    gap: 10px !important;
+    font-size: 0.9rem !important;
+    padding: 2px 0 !important;
+    font-weight: 400 !important; /* Peso normal, não grosso */
+}
+
+.filter-label:hover {
+    color: #d4af37 !important;
+}
+
+/* Corrigir estilos dos selects - fundo escuro com texto claro */
+.filter-select,
+.filter-text {
+    width: 100% !important;
+    padding: 10px !important;
+    border: 2px solid #555 !important; /* Borda escura */
+    border-radius: 6px !important;
+    background: #2a2a2a !important; /* Fundo escuro */
+    color: #e0e0e0 !important; /* Texto claro */
+    font-size: 14px !important;
+    font-weight: 400 !important; /* Peso normal */
+    transition: border-color 0.3s ease !important;
+    font-family: "Space Grotesk", sans-serif !important;
+}
+
+.filter-select:focus,
+.filter-text:focus {
+    outline: none !important;
+    border-color: #d4af37 !important;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Garantir que as opções do select sejam visíveis no tema escuro */
+.filter-select option {
+    color: #e0e0e0 !important;
+    background: #2a2a2a !important;
+    font-weight: 400 !important;
+    padding: 5px !important;
+}
+
+/* Corrigir inputs de radio e checkbox */
+.filter-input {
+    margin: 0 !important;
+    padding: 0 !important;
+    accent-color: #d4af37 !important;
+    flex-shrink: 0 !important;
+    width: 16px !important;
+    height: 16px !important;
+    vertical-align: baseline !important;
+    position: relative !important;
+    top: 0 !important;
+}
+
+/* Estilos específicos para as páginas de filtros */
+.filters-container .filter-group h3 {
+    color: #d4af37 !important;
+    font-weight: 500 !important;
+    font-size: 1.1rem !important;
+    text-transform: none !important;
+}
+
+/* Garantir que os textos dos labels sejam visíveis no fundo preto */
+.filters-container .filter-label {
+    color: #e0e0e0 !important;
+    font-weight: 400 !important;
+}
+
+.filters-container .filter-label:hover {
+    color: #d4af37 !important;
+}
+
+/* Corrigir fundo do container dos filtros para preto */
+.filters-container {
+    background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%) !important;
+    border-right: 3px solid #d4af37 !important;
+    color: #e0e0e0 !important;
+    width: 450px !important; /* Garantir largura de 450px */
+}
+
+/* Ajustar header dos filtros para fundo preto */
+.filters-header {
+    background: rgba(212, 175, 55, 0.15) !important;
+    border-bottom: 2px solid #d4af37 !important;
+}
+
+.filters-title {
+    color: #d4af37 !important;
+    font-weight: 600 !important;
+    font-size: 1.6rem !important;
+}
+
+.section-indicator {
+    background: rgba(212, 175, 55, 0.2) !important;
+    color: #d4af37 !important;
+    font-weight: 500 !important;
+}
+
+/* Melhorar legibilidade dos displays de preço */
+.price-display {
+    color: #d4af37 !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    margin-top: 5px !important;
+    font-size: 14px !important;
+}
+
+/* Corrigir botões de ação para fundo preto */
+.filter-actions {
+    background: rgba(212, 175, 55, 0.1) !important;
+    border-top: 2px solid #d4af37 !important;
+}
+
+.filter-btn {
+    font-weight: 500 !important; /* Menos grosso */
+    font-size: 14px !important;
+}
+
+.filter-btn.primary {
+    background: #d4af37 !important;
+    color: #000 !important;
+    font-weight: 500 !important;
+}
+
+.filter-btn.secondary {
+    background: transparent !important;
+    color: #d4af37 !important;
+    border: 2px solid #d4af37 !important;
+    font-weight: 500 !important;
+}
+
+/* Corrigir grupos de filtros */
+.filter-group {
+    margin-bottom: 25px !important;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2) !important;
+    padding-bottom: 15px !important;
+}
+
+/* Tema escuro já aplicado por padrão - removendo media query desnecessária */
+
+/* Sobrescrever estilos globais que possam estar interferindo */
+.filters-container h3 {
+    font-weight: 500 !important;
+    color: #d4af37 !important;
+}
+
+.filters-container label {
+    font-weight: 400 !important;
+    color: #333333 !important;
+}
+
+.filters-container select {
+    font-weight: 400 !important;
+    color: #333333 !important;
+}
+
+/* Garantir especificidade máxima para os estilos dos filtros */
+aside.filters-container .filter-group h3 {
+    font-weight: 500 !important;
+    color: #d4af37 !important;
+}
+
+aside.filters-container .filter-label {
+    font-weight: 400 !important;
+    color: #e0e0e0 !important;
+}
+
+aside.filters-container .filter-select {
+    font-weight: 400 !important;
+    color: #e0e0e0 !important;
+    background: #2a2a2a !important;
+}
+
+/* Forçar layout vertical para todos os filtros (especialmente tipos de imóveis) */
+.filter-group {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.filter-group .filter-label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+    width: 100% !important;
+}
+
+/* Garantir que os textos sejam sempre legíveis */
+.filters-container * {
+    font-weight: 400 !important;
+}
+
+.filters-container h1,
+.filters-container h2,
+.filters-container h3,
+.filters-container h4,
+.filters-container h5,
+.filters-container h6 {
+    font-weight: 500 !important;
+    color: #d4af37 !important;
+}
+
+/* Corrigir especificamente os selects para garantir visibilidade no fundo preto */
+.filters-container select,
+.filters-container option {
+    color: #e0e0e0 !important;
+    background: #2a2a2a !important;
+    font-weight: 400 !important;
+    border: 2px solid #555 !important;
+}
+
+.filters-container select:focus {
+    border-color: #d4af37 !important;
+    outline: none !important;
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.3) !important;
+}
+
+/* Garantir que as labels dos inputs sejam sempre visíveis no fundo preto */
+.filters-container label {
+    color: #e0e0e0 !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;
+}
+
+.filters-container label:hover {
+    color: #d4af37 !important;
+}

@@ -1,0 +1,11 @@
+# Redirecionamentos para o Netlify
+
+# Páginas HTML
+/dashboard          /html/dashboard.html        200
+/lancamentos        /html/lancamentos.html      200
+/beira-mar          /html/beira-mar.html        200
+/mais-procurados    /html/mais-procurados.html  200
+/pronto-morar       /html/pronto-morar.html     200
+
+# SPA fallback - mantém URLs sem recarregar
+/*    /index.html   200

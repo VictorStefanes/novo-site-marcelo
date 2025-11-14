@@ -15,6 +15,8 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../css/dashboard-clean.css">
+    <link rel="stylesheet" href="../css/dashboard-overview.css">
+    <link rel="stylesheet" href="../css/dashboard-sections.css">
 </head>
 <body>
     <!-- Sidebar -->
@@ -98,13 +100,111 @@
                     <p>Acompanhe as principais métricas do seu negócio</p>
                 </div>
                 
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-chart-bar"></i>
+                <!-- Metrics Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon blue">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Imóveis Ativos</span>
+                            <h3 class="metric-value" id="activePropertiesCount">-</h3>
+                            <span class="metric-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="activePropertiesChange">-</span>
+                            </span>
+                        </div>
                     </div>
-                    <h3>Dashboard Pronto</h3>
-                    <p>Configure suas métricas e informações para começar</p>
-                    <button class="btn-primary">Configurar Agora</button>
+
+                    <div class="metric-card">
+                        <div class="metric-icon green">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Vendas no Mês</span>
+                            <h3 class="metric-value" id="monthlySalesCount">-</h3>
+                            <span class="metric-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="monthlySalesChange">-</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Receita Mensal</span>
+                            <h3 class="metric-value" id="monthlyRevenue">-</h3>
+                            <span class="metric-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="revenueChange">-</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon orange">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="metric-content">
+                            <span class="metric-label">Novos Leads</span>
+                            <h3 class="metric-value" id="newLeadsCount">-</h3>
+                            <span class="metric-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="leadsChange">-</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Evolução de Vendas</h3>
+                            <select id="salesChartPeriod" class="chart-period-selector">
+                                <option value="6">Últimos 6 meses</option>
+                                <option value="12" selected>Último ano</option>
+                            </select>
+                        </div>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Receita por Tipo</h3>
+                            <select id="revenueChartPeriod" class="chart-period-selector">
+                                <option value="month" selected>Este mês</option>
+                                <option value="year">Este ano</option>
+                            </select>
+                        </div>
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Activities and Top Properties -->
+                <div class="overview-bottom-row">
+                    <div class="activity-card">
+                        <div class="activity-header">
+                            <h3>Atividades Recentes</h3>
+                            <button class="btn-link" id="viewAllActivities">Ver todas</button>
+                        </div>
+                        <div class="activity-list" id="activityList">
+                            <!-- Activities will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div class="top-properties-card">
+                        <div class="top-properties-header">
+                            <h3>Imóveis em Destaque</h3>
+                            <button class="btn-link" id="viewAllTopProperties">Ver todos</button>
+                        </div>
+                        <div class="top-properties-list" id="topPropertiesList">
+                            <!-- Top properties will be loaded here -->
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -115,13 +215,71 @@
                     <p>Gerencie todos os seus imóveis</p>
                 </div>
                 
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-home"></i>
+                <!-- Properties Management Container -->
+                <div id="propertiesContainer">
+                    <!-- Filters and Controls -->
+                    <div class="properties-controls">
+                        <div class="controls-left">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="propertiesSearch" placeholder="Buscar imóveis...">
+                            </div>
+                            <div class="filter-group">
+                                <select id="typeFilter">
+                                    <option value="">Todos os tipos</option>
+                                    <option value="apartamento">Apartamento</option>
+                                    <option value="casa">Casa</option>
+                                    <option value="terreno">Terreno</option>
+                                    <option value="comercial">Comercial</option>
+                                </select>
+                                <select id="statusFilter">
+                                    <option value="">Todos os status</option>
+                                    <option value="disponivel">Disponível</option>
+                                    <option value="vendido">Vendido</option>
+                                    <option value="reservado">Reservado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="controls-right">
+                            <button id="addPropertyBtn" class="btn-primary">
+                                <i class="fas fa-plus"></i>
+                                Adicionar Imóvel
+                            </button>
+                        </div>
                     </div>
-                    <h3>Nenhum Imóvel Cadastrado</h3>
-                    <p>Comece adicionando seu primeiro imóvel</p>
-                    <button class="btn-primary">Adicionar Imóvel</button>
+
+                    <!-- Properties Table -->
+                    <div class="properties-table-container">
+                        <table id="propertiesTable" class="properties-table">
+                            <thead>
+                                <tr>
+                                    <th>Imóvel</th>
+                                    <th>Tipo</th>
+                                    <th>Categoria</th>
+                                    <th>Preço</th>
+                                    <th>Localização</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="propertiesTableBody">
+                                <!-- Properties will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="propertiesEmptyState" class="empty-state" style="display: none;">
+                        <div class="empty-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3>Nenhum Imóvel Encontrado</h3>
+                        <p>Comece adicionando seu primeiro imóvel</p>
+                        <button class="btn-primary" onclick="propertyManager.showPropertyModal()">
+                            <i class="fas fa-plus"></i>
+                            Adicionar Imóvel
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -132,13 +290,74 @@
                     <p>Acompanhe seus leads e oportunidades</p>
                 </div>
                 
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-users"></i>
+                <!-- Leads Stats -->
+                <div class="leads-stats">
+                    <div class="lead-stat-card new">
+                        <div class="stat-number" id="newLeadsCount">0</div>
+                        <div class="stat-label">Novos</div>
                     </div>
-                    <h3>Nenhum Lead Registrado</h3>
-                    <p>Os leads aparecerão aqui quando começarem a chegar</p>
-                    <button class="btn-primary">Importar Leads</button>
+                    <div class="lead-stat-card contact">
+                        <div class="stat-number" id="contactedLeadsCount">0</div>
+                        <div class="stat-label">Em Contato</div>
+                    </div>
+                    <div class="lead-stat-card negotiation">
+                        <div class="stat-number" id="negotiationLeadsCount">0</div>
+                        <div class="stat-label">Negociação</div>
+                    </div>
+                    <div class="lead-stat-card converted">
+                        <div class="stat-number" id="convertedLeadsCount">0</div>
+                        <div class="stat-label">Convertidos</div>
+                    </div>
+                </div>
+
+                <!-- Leads Controls -->
+                <div class="leads-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="leadsSearch" placeholder="Buscar leads...">
+                    </div>
+                    <div class="filter-group">
+                        <select id="leadStatusFilter">
+                            <option value="">Todos os status</option>
+                            <option value="new">Novo</option>
+                            <option value="contacted">Em Contato</option>
+                            <option value="negotiation">Negociação</option>
+                            <option value="converted">Convertido</option>
+                            <option value="lost">Perdido</option>
+                        </select>
+                        <select id="leadSourceFilter">
+                            <option value="">Todas as origens</option>
+                            <option value="website">Site</option>
+                            <option value="phone">Telefone</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="email">Email</option>
+                            <option value="referral">Indicação</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" id="addLeadBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Adicionar Lead
+                    </button>
+                </div>
+
+                <!-- Leads Table -->
+                <div class="leads-table-container">
+                    <table class="leads-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Contato</th>
+                                <th>Interesse</th>
+                                <th>Origem</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leadsTableBody">
+                            <!-- Leads serão carregados aqui dinamicamente -->
+                        </tbody>
+                    </table>
                 </div>
             </section>
 
@@ -149,13 +368,72 @@
                     <p>Organize suas visitas e compromissos</p>
                 </div>
                 
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-calendar"></i>
+                <div class="agenda-layout">
+                    <!-- Calendar View -->
+                    <div class="calendar-section">
+                        <div class="calendar-header">
+                            <button class="btn-icon" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                            <h3 id="currentMonth">Novembro 2025</h3>
+                            <button class="btn-icon" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        <div class="calendar-grid">
+                            <div class="calendar-day-header">Dom</div>
+                            <div class="calendar-day-header">Seg</div>
+                            <div class="calendar-day-header">Ter</div>
+                            <div class="calendar-day-header">Qua</div>
+                            <div class="calendar-day-header">Qui</div>
+                            <div class="calendar-day-header">Sex</div>
+                            <div class="calendar-day-header">Sáb</div>
+                            <!-- Calendar days will be generated here -->
+                            <div class="calendar-day">1</div>
+                            <div class="calendar-day">2</div>
+                            <div class="calendar-day">3</div>
+                            <div class="calendar-day">4</div>
+                            <div class="calendar-day">5</div>
+                            <div class="calendar-day">6</div>
+                            <div class="calendar-day">7</div>
+                            <div class="calendar-day">8</div>
+                            <div class="calendar-day">9</div>
+                            <div class="calendar-day">10</div>
+                            <div class="calendar-day">11</div>
+                            <div class="calendar-day">12</div>
+                            <div class="calendar-day">13</div>
+                            <div class="calendar-day today has-event">14<span class="event-dot"></span></div>
+                            <div class="calendar-day has-event">15<span class="event-dot"></span></div>
+                            <div class="calendar-day">16</div>
+                            <div class="calendar-day">17</div>
+                            <div class="calendar-day has-event">18<span class="event-dot"></span><span class="event-dot"></span></div>
+                            <div class="calendar-day">19</div>
+                            <div class="calendar-day">20</div>
+                            <div class="calendar-day">21</div>
+                            <div class="calendar-day">22</div>
+                            <div class="calendar-day">23</div>
+                            <div class="calendar-day">24</div>
+                            <div class="calendar-day">25</div>
+                            <div class="calendar-day">26</div>
+                            <div class="calendar-day">27</div>
+                            <div class="calendar-day">28</div>
+                            <div class="calendar-day">29</div>
+                            <div class="calendar-day">30</div>
+                        </div>
+                        <button class="btn-primary btn-block" id="scheduleVisitBtn">
+                            <i class="fas fa-plus"></i>
+                            Agendar Nova Visita
+                        </button>
                     </div>
-                    <h3>Agenda Vazia</h3>
-                    <p>Nenhum compromisso agendado</p>
-                    <button class="btn-primary">Agendar Visita</button>
+
+                    <!-- Appointments List -->
+                    <div class="appointments-section">
+                        <h3>Próximos Compromissos</h3>
+                        
+                        <div class="appointments-list" id="appointmentsList">
+                            <!-- Compromissos serão carregados aqui dinamicamente -->
+                            <div class="empty-state-inline">
+                                <i class="fas fa-calendar"></i>
+                                <p>Nenhum compromisso agendado</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -166,13 +444,105 @@
                     <p>Análise de performance e resultados</p>
                 </div>
                 
-                <div class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-chart-line"></i>
+                <!-- Period Selector -->
+                <div class="analytics-controls">
+                    <select id="analyticsPeriod" class="period-selector">
+                        <option value="week">Última Semana</option>
+                        <option value="month" selected>Último Mês</option>
+                        <option value="quarter">Último Trimestre</option>
+                        <option value="year">Último Ano</option>
+                    </select>
+                    <button class="btn-primary" id="exportReportBtn">
+                        <i class="fas fa-download"></i>
+                        Exportar Relatório
+                    </button>
+                </div>
+
+                <!-- Performance Metrics -->
+                <div class="analytics-metrics">
+                    <div class="analytics-card">
+                        <div class="analytics-icon blue">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="analytics-label">Taxa de Conversão</div>
+                            <div class="analytics-value">0%</div>
+                            <div class="analytics-trend">
+                                Aguardando dados
+                            </div>
+                        </div>
                     </div>
-                    <h3>Dados Insuficientes</h3>
-                    <p>Relatórios serão gerados quando houver dados</p>
-                    <button class="btn-primary">Ver Configurações</button>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon green">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="analytics-label">Tempo Médio de Venda</div>
+                            <div class="analytics-value">- dias</div>
+                            <div class="analytics-trend">
+                                Aguardando dados
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon purple">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="analytics-label">Visualizações Totais</div>
+                            <div class="analytics-value">0</div>
+                            <div class="analytics-trend">
+                                Aguardando dados
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <div class="analytics-icon orange">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="analytics-content">
+                            <div class="analytics-label">Satisfação do Cliente</div>
+                            <div class="analytics-value">-/5.0</div>
+                            <div class="analytics-trend">
+                                Aguardando dados
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="analytics-charts">
+                    <div class="analytics-chart-card">
+                        <h3>Desempenho de Vendas</h3>
+                        <canvas id="salesPerformanceChart"></canvas>
+                    </div>
+
+                    <div class="analytics-chart-card">
+                        <h3>Origem dos Leads</h3>
+                        <canvas id="leadSourceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="top-performers-section">
+                    <div class="top-performers-card">
+                        <h3>Imóveis Mais Vistos</h3>
+                        <div class="empty-state-inline">
+                            <i class="fas fa-home"></i>
+                            <p>Nenhum dado disponível ainda</p>
+                        </div>
+                    </div>
+
+                    <div class="top-performers-card">
+                        <h3>Bairros Mais Procurados</h3>
+                        <div class="empty-state-inline">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <p>Nenhum dado disponível ainda</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -220,11 +590,389 @@
         </div>
     </main>
 
-    <!-- Scripts -->
-    <script src="../js/auth-api.js"></script>
-    <script src="../js/dashboard-clean.js"></script>
+    <!-- Property Modal -->
+    <div id="propertyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Adicionar Imóvel</h3>
+                <button type="button" class="close" id="closeModalBtn" onclick="closePropertyModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="propertyForm">
+                    <input type="hidden" id="propertyId">
+                    
+                    <!-- Informações Básicas -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Informações Básicas</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title">Título do Imóvel*</label>
+                                <input type="text" id="title" required placeholder="Ex: Apartamento 3 quartos vista mar">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="finalidade">Finalidade*</label>
+                                <select id="finalidade" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Venda">Venda</option>
+                                    <option value="Aluguel">Aluguel</option>
+                                    <option value="Temporada">Temporada</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo">Tipo do Imóvel*</label>
+                                <select id="tipo" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Casa">Casa</option>
+                                    <option value="Apartamento">Apartamento</option>
+                                    <option value="Cobertura">Cobertura</option>
+                                    <option value="Studio">Studio</option>
+                                    <option value="Kitnet">Kitnet</option>
+                                    <option value="Terreno">Terreno</option>
+                                    <option value="Comercial">Comercial</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price">Preço (R$)*</label>
+                                <input type="number" id="price" step="0.01" required min="0" placeholder="450000.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status*</label>
+                                <select id="status" required>
+                                    <option value="disponivel">Disponível</option>
+                                    <option value="vendido">Vendido</option>
+                                    <option value="reservado">Reservado</option>
+                                    <option value="alugado">Alugado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="categoria">Categoria do Empreendimento*</label>
+                                <select id="categoria" required>
+                                    <option value="">Selecione onde o imóvel aparecerá...</option>
+                                    <option value="lancamentos">🚀 Lançamentos</option>
+                                    <option value="mais-procurados">⭐ Mais Procurados</option>
+                                    <option value="beira-mar">🌊 Beira Mar</option>
+                                </select>
+                                <small class="field-help">Escolha em qual página do site este imóvel será exibido</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Características do Imóvel -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Características</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="quartos">Número de Quartos</label>
+                                <select id="quartos">
+                                    <option value="">Não se aplica</option>
+                                    <option value="1">1 Quarto</option>
+                                    <option value="2">2 Quartos</option>
+                                    <option value="3">3 Quartos</option>
+                                    <option value="4">4 ou mais Quartos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="suites">Número de Suítes</label>
+                                <select id="suites">
+                                    <option value="">Não se aplica</option>
+                                    <option value="1">1 Suíte</option>
+                                    <option value="2">2 Suítes</option>
+                                    <option value="3">3 Suítes</option>
+                                    <option value="4">4 ou mais Suítes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="banheiros">Número de Banheiros</label>
+                                <select id="banheiros">
+                                    <option value="">Não se aplica</option>
+                                    <option value="1">1 Banheiro</option>
+                                    <option value="2">2 Banheiros</option>
+                                    <option value="3">3 ou mais Banheiros</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="vagas">Vagas na Garagem</label>
+                                <select id="vagas">
+                                    <option value="">Não se aplica</option>
+                                    <option value="0">Sem vaga</option>
+                                    <option value="1">1 Vaga</option>
+                                    <option value="2">2 Vagas</option>
+                                    <option value="3">3 ou mais Vagas</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="area">Área (m²)</label>
+                                <input type="number" id="area" step="0.01" min="0" placeholder="85.5">
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <!-- Informações Financeiras e Adicionais -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Informações Financeiras</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ano_construcao">Ano de Construção</label>
+                                <input type="number" id="ano_construcao" min="1900" max="2030" placeholder="2020">
+                            </div>
+                            <div class="form-group">
+                                <label for="iptu_mensal">IPTU Mensal (R$)</label>
+                                <input type="number" id="iptu_mensal" step="0.01" min="0" placeholder="280.00">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="condominio_mensal">Condomínio Mensal (R$)</label>
+                                <input type="number" id="condominio_mensal" step="0.01" min="0" placeholder="450.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="situacao_imovel">Situação do Imóvel</label>
+                                <select id="situacao_imovel">
+                                    <option value="">Selecione...</option>
+                                    <option value="Novo">Novo</option>
+                                    <option value="Seminovo">Seminovo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="Habitado">Habitado</option>
+                                    <option value="Desocupado">Desocupado</option>
+                                    <option value="Em construção">Em construção</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="opcoes_financiamento">Opções de Financiamento</label>
+                                <select id="opcoes_financiamento" multiple>
+                                    <option value="FGTS">FGTS</option>
+                                    <option value="Financiamento Bancário">Financiamento Bancário</option>
+                                    <option value="Financiamento Próprio">Financiamento Próprio</option>
+                                    <option value="Permuta">Permuta</option>
+                                    <option value="À Vista">À Vista</option>
+                                </select>
+                                <small class="field-help">Selecione múltiplas opções mantendo Ctrl pressionado</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="disponibilidade">Disponibilidade</label>
+                                <select id="disponibilidade">
+                                    <option value="">Selecione...</option>
+                                    <option value="Imediata">Disponível imediatamente</option>
+                                    <option value="Agendamento">Necessário agendamento</option>
+                                    <option value="Chaves na imobiliária">Chaves na imobiliária</option>
+                                    <option value="Ocupado">Ocupado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Para Lançamentos -->
+                        <div class="form-group conditional-field" data-category="lancamentos" style="display: none;">
+                            <label for="andamento_obra">Andamento da Obra (%)</label>
+                            <input type="number" id="andamento_obra" min="0" max="100" placeholder="60">
+                        </div>
+
+                        <div class="form-row conditional-field" data-category="lancamentos" style="display: none;">
+                            <div class="form-group">
+                                <label for="previsao_entrega">Previsão de Entrega</label>
+                                <input type="month" id="previsao_entrega">
+                            </div>
+                            <div class="form-group">
+                                <label for="entrada_minima">Entrada Mínima (%)</label>
+                                <input type="number" id="entrada_minima" min="0" max="100" placeholder="20">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Localização -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Localização</h4>
+                        
+                        <div class="form-group">
+                            <label for="endereco">Endereço Completo*</label>
+                            <input type="text" id="endereco" required placeholder="Ex: Rua das Flores, 123">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="estado">Estado*</label>
+                                <select id="estado" required>
+                                    <option value="AL">Alagoas</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cidade">Cidade*</label>
+                                <select id="cidade" required>
+                                    <option value="Maceió">Maceió</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bairro">Bairro</label>
+                            <select id="bairro">
+                                <option value="">Selecione o bairro</option>
+                                <option value="Ponta Verde">Ponta Verde</option>
+                                <option value="Jatiúca">Jatiúca</option>
+                                <option value="Pajuçara">Pajuçara</option>
+                                <option value="Farol">Farol</option>
+                                <option value="Mangabeiras">Mangabeiras</option>
+                                <option value="Cruz das Almas">Cruz das Almas</option>
+                                <option value="Barro Duro">Barro Duro</option>
+                                <option value="Benedito Bentes">Benedito Bentes</option>
+                                <option value="Tabuleiro dos Martins">Tabuleiro dos Martins</option>
+                                <option value="Jacintinho">Jacintinho</option>
+                                <option value="Feitosa">Feitosa</option>
+                                <option value="Serraria">Serraria</option>
+                                <option value="Ponta Grossa">Ponta Grossa</option>
+                                <option value="Petrópolis">Petrópolis</option>
+                                <option value="Clima Bom">Clima Bom</option>
+                                <option value="Poço">Poço</option>
+                                <option value="Santa Amélia">Santa Amélia</option>
+                                <option value="Jardim Petrópolis">Jardim Petrópolis</option>
+                                <option value="Gruta de Lourdes">Gruta de Lourdes</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Descrição e Características -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Detalhes</h4>
+                        
+                        <div class="form-group">
+                            <label for="descricao">Descrição do Imóvel</label>
+                            <textarea id="descricao" rows="4" placeholder="Descreva as principais características e diferenciais do imóvel..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="caracteristicas">Características Especiais</label>
+                            <textarea id="caracteristicas" rows="3" placeholder="Ex: Piscina, Academia, Churrasqueira, Vista para o mar..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Imagens do Imóvel -->
+                    <div class="form-section">
+                        <h4 class="form-section-title">Imagens do Imóvel</h4>
+                        
+                        <div class="form-group">
+                            <label for="images">Adicionar Imagens*</label>
+                            <input type="file" id="images" multiple accept="image/*" class="file-input">
+                            <div class="file-input-help">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Clique para selecionar imagens ou arraste e solte aqui</span>
+                                <small>Formatos aceitos: JPG, PNG, WebP (máx. 5MB cada)</small>
+                            </div>
+                        </div>
+
+                        <div id="imagePreview" class="image-preview-container">
+                            <!-- Preview das imagens aparecerá aqui -->
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn-secondary" id="cancelModalBtn" onclick="closePropertyModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            Salvar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
-    <!-- Scripts de desenvolvimento (remover em produção) -->
-    <!-- <script src="../js/dev-mode.js"></script> -->
+    <!-- Scripts de Produção -->
+    <script src="../js/image-upload-system.js"></script>
+    <script src="../js/property-system-final.js"></script>
+    <script src="../js/dashboard-system-final.js"></script>
+    <script src="../js/dashboard-overview.js"></script>
+    <script src="../js/dashboard-sections.js"></script>
+    
+    <!-- Sistema de Navegação -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navegação do Dashboard
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const pageTitle = document.querySelector('.page-title');
+            const pageSubtitle = document.querySelector('.page-subtitle');
+            
+            const sectionTitles = {
+                'overview': { title: 'Visão Geral', subtitle: 'Painel de controle administrativo' },
+                'properties': { title: 'Gerenciar Imóveis', subtitle: 'Adicionar, editar e visualizar propriedades' },
+                'leads': { title: 'Leads e Contatos', subtitle: 'Gerenciar potenciais clientes' },
+                'agenda': { title: 'Agenda', subtitle: 'Compromissos e visitas agendadas' },
+                'analytics': { title: 'Relatórios', subtitle: 'Análises e estatísticas de vendas' },
+                'settings': { title: 'Configurações', subtitle: 'Configurações do sistema e perfil' }
+            };
+            
+            function showSection(sectionId) {
+                contentSections.forEach(s => s.classList.remove('active'));
+                navLinks.forEach(l => l.parentElement.classList.remove('active'));
+                
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection) targetSection.classList.add('active');
+                
+                const activeLink = document.querySelector(`[data-section="${sectionId}"]`);
+                if (activeLink) activeLink.parentElement.classList.add('active');
+                
+                if (sectionTitles[sectionId]) {
+                    if (pageTitle) pageTitle.textContent = sectionTitles[sectionId].title;
+                    if (pageSubtitle) pageSubtitle.textContent = sectionTitles[sectionId].subtitle;
+                }
+            }
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    if (sectionId) {
+                        showSection(sectionId);
+                        history.pushState(null, null, `#${sectionId}`);
+                    }
+                });
+            });
+            
+            const hash = window.location.hash.substring(1);
+            if (hash && document.getElementById(hash)) showSection(hash);
+            
+            window.addEventListener('popstate', function() {
+                const hash = window.location.hash.substring(1);
+                showSection(hash && document.getElementById(hash) ? hash : 'overview');
+            });
+            
+            // Toggle do sidebar
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('collapsed');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -7,7 +7,7 @@
     position: fixed;
     top: 120px;
     left: 0;
-    width: 280px;
+    width: 450px;
     height: calc(100vh - 120px);
     background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
     border-right: 3px solid #d4af37;
@@ -277,7 +277,7 @@
 
 /* Área de conteúdo principal */
 .main-content {
-    margin-left: 280px;
+    margin-left: 450px;
     padding: 140px 20px 20px;
     min-height: 100vh;
     background: #f8f9fa;

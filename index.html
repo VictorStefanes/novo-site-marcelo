@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcelo Augusto</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/empty-states.css">
     <link rel="stylesheet" href="css/dropdown.css">
     <link rel="stylesheet" href="css/mobile-menu.css">
     <link rel="stylesheet" href="css/filters.css">
     <link rel="stylesheet" href="css/property-sync-styles.css">
     <link rel="stylesheet" href="css/index-inline-styles.css">
+    <link rel="stylesheet" href="css/property-cards.css">
+    <link rel="stylesheet" href="css/golden-style-restoration.css">
+    <link rel="stylesheet" href="css/style-override.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
@@ -78,64 +81,7 @@
                         <span class="arrow-icon">&#10094;</span>
                     </button>
                     <div class="grid carousel-cards mais-procurados-cards" data-category="mais-procurados" data-max-items="4">
-                        <!-- Card Mais Procurado -->
-                        <div class="property-card popular-card">
-                            <div class="property-image">
-                                <img src="https://via.placeholder.com/400x250/f39c12/ffffff?text=Apartamento+Popular" alt="Apartamento Beira Mar Exclusivo" loading="lazy">
-                                <div class="property-category mais-procurados">Mais Procurado</div>
-                                <div class="property-badge hot">🔥 HOT</div>
-                                <div class="property-views">+500 visualizações</div>
-                            </div>
-                            <div class="property-content">
-                                <div class="property-title">
-                                    <h3><a href="html/imovel.html?id=IMV_002" class="property-link">Apartamento Beira Mar Exclusivo</a></h3>
-                                    <span class="property-code">Código: IMV_002</span>
-                                </div>
-                                <div class="property-location">
-                                    <p><i class="fas fa-map-marker-alt"></i> Ponta Verde, Maceió</p>
-                                </div>
-                                <div class="property-features">
-                                    <div class="feature">
-                                        <i class="fas fa-bed"></i>
-                                        <span>4 quartos</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-bath"></i>
-                                        <span>3 banheiros</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-car"></i>
-                                        <span>3 vagas</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-ruler-combined"></i>
-                                        <span>180m²</span>
-                                    </div>
-                                </div>
-                                <div class="property-highlights">
-                                    <span class="highlight-item"><i class="fas fa-water"></i> Frente Mar</span>
-                                    <span class="highlight-item"><i class="fas fa-crown"></i> Luxo</span>
-                                    <span class="highlight-item"><i class="fas fa-utensils"></i> Gourmet</span>
-                                </div>
-                                <div class="property-price">
-                                    <div class="price-container">
-                                        <h3 class="current-price">R$ 1.350.000</h3>
-                                    </div>
-                                    <p class="price-type">À Venda</p>
-                                </div>
-                                <div class="property-actions">
-                                    <a href="html/imovel.html?id=IMV_002" class="btn-details">
-                                        <i class="fas fa-eye"></i> Ver Detalhes
-                                    </a>
-                                    <button class="btn-contact" onclick="contactAboutProperty('IMV_002')">
-                                        <i class="fab fa-whatsapp"></i> Contatar
-                                    </button>
-                                    <button class="btn-favorite" onclick="toggleFavorite('IMV_002')">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Cards carregados dinamicamente via JavaScript -->
                     </div>
                     <button class="carousel-arrow custom-arrow right" aria-label="Próximo" style="position:absolute;right:-55px;top:50%;transform:translateY(-50%);">
                         <span class="arrow-icon">&#10095;</span>
@@ -155,65 +101,7 @@
                         <span class="arrow-icon">&#10094;</span>
                     </button>
                     <div class="grid carousel-cards lancamentos-cards" data-category="lancamentos" data-max-items="4">
-                        <!-- Card Example - Lançamento Premium -->
-                        <div class="property-card premium-card">
-                            <div class="property-image">
-                                <img src="https://via.placeholder.com/400x250/667eea/ffffff?text=Residencial+Premium" alt="Residencial Premium Vista Atlântica" loading="lazy">
-                                <div class="property-category lancamentos">Lançamento</div>
-                                <div class="property-badge new">NOVO</div>
-                                <div class="property-discount">15% OFF</div>
-                            </div>
-                            <div class="property-content">
-                                <div class="property-title">
-                                    <h3><a href="html/imovel.html?id=IMV_001" class="property-link">Residencial Premium Vista Atlântica</a></h3>
-                                    <span class="property-code">Código: IMV_001</span>
-                                </div>
-                                <div class="property-location">
-                                    <p><i class="fas fa-map-marker-alt"></i> Pajuçara, Maceió</p>
-                                </div>
-                                <div class="property-features">
-                                    <div class="feature">
-                                        <i class="fas fa-bed"></i>
-                                        <span>3 quartos</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-bath"></i>
-                                        <span>2 banheiros</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-car"></i>
-                                        <span>2 vagas</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-ruler-combined"></i>
-                                        <span>120m²</span>
-                                    </div>
-                                </div>
-                                <div class="property-highlights">
-                                    <span class="highlight-item"><i class="fas fa-water"></i> Vista Mar</span>
-                                    <span class="highlight-item"><i class="fas fa-swimming-pool"></i> Piscina</span>
-                                    <span class="highlight-item"><i class="fas fa-dumbbell"></i> Academia</span>
-                                </div>
-                                <div class="property-price">
-                                    <div class="price-container">
-                                        <span class="old-price">R$ 1.000.000</span>
-                                        <h3 class="current-price">R$ 850.000</h3>
-                                    </div>
-                                    <p class="price-type">À Venda</p>
-                                </div>
-                                <div class="property-actions">
-                                    <a href="html/imovel.html?id=IMV_001" class="btn-details">
-                                        <i class="fas fa-eye"></i> Ver Detalhes
-                                    </a>
-                                    <button class="btn-contact" onclick="contactAboutProperty('IMV_001')">
-                                        <i class="fab fa-whatsapp"></i> Contatar
-                                    </button>
-                                    <button class="btn-favorite" onclick="toggleFavorite('IMV_001')">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Cards carregados dinamicamente via JavaScript -->
                     </div>
                     <button class="carousel-arrow custom-arrow right lancamentos-arrow" aria-label="Próximo" style="position:absolute;right:-55px;top:50%;transform:translateY(-50%);">
                         <span class="arrow-icon">&#10095;</span>
@@ -233,64 +121,7 @@
                         <span class="arrow-icon">&#10094;</span>
                     </button>
                     <div class="grid carousel-cards pronto-cards" data-category="pronto-para-morar" data-max-items="4">
-                        <!-- Card Pronto para Morar -->
-                        <div class="property-card ready-card">
-                            <div class="property-image">
-                                <img src="https://via.placeholder.com/400x250/27ae60/ffffff?text=Casa+Pronta" alt="Casa Moderna Completa" loading="lazy">
-                                <div class="property-category pronto-morar">Pronto para Morar</div>
-                                <div class="property-badge ready">✅ PRONTO</div>
-                                <div class="property-status">Imediato</div>
-                            </div>
-                            <div class="property-content">
-                                <div class="property-title">
-                                    <h3><a href="html/imovel.html?id=IMV_003" class="property-link">Casa Moderna Completa</a></h3>
-                                    <span class="property-code">Código: IMV_003</span>
-                                </div>
-                                <div class="property-location">
-                                    <p><i class="fas fa-map-marker-alt"></i> Gruta de Lourdes, Maceió</p>
-                                </div>
-                                <div class="property-features">
-                                    <div class="feature">
-                                        <i class="fas fa-bed"></i>
-                                        <span>3 quartos</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-bath"></i>
-                                        <span>2 banheiros</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-car"></i>
-                                        <span>2 vagas</span>
-                                    </div>
-                                    <div class="feature">
-                                        <i class="fas fa-ruler-combined"></i>
-                                        <span>150m²</span>
-                                    </div>
-                                </div>
-                                <div class="property-highlights">
-                                    <span class="highlight-item"><i class="fas fa-home"></i> Mobiliada</span>
-                                    <span class="highlight-item"><i class="fas fa-leaf"></i> Jardim</span>
-                                    <span class="highlight-item"><i class="fas fa-shield-alt"></i> Segurança</span>
-                                </div>
-                                <div class="property-price">
-                                    <div class="price-container">
-                                        <h3 class="current-price">R$ 650.000</h3>
-                                    </div>
-                                    <p class="price-type">À Venda</p>
-                                </div>
-                                <div class="property-actions">
-                                    <a href="html/imovel.html?id=IMV_003" class="btn-details">
-                                        <i class="fas fa-eye"></i> Ver Detalhes
-                                    </a>
-                                    <button class="btn-contact" onclick="contactAboutProperty('IMV_003')">
-                                        <i class="fab fa-whatsapp"></i> Contatar
-                                    </button>
-                                    <button class="btn-favorite" onclick="toggleFavorite('IMV_003')">
-                                        <i class="far fa-heart"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <!-- Cards carregados dinamicamente via JavaScript -->
                     </div>
                     <button class="carousel-arrow custom-arrow right pronto-arrow" aria-label="Próximo" style="position:absolute;right:-55px;top:50%;transform:translateY(-50%);">
                         <span class="arrow-icon">&#10095;</span>
@@ -655,10 +486,8 @@
         </div>
     </div>
 
-    <script src="js/system-config.js"></script>
     <script src="js/script.js"></script>
-    <script src="js/property-sync-system.js"></script>
-    <script src="js/homepage-property-manager.js"></script>
+    <script src="js/property-system-final.js"></script>
     
     <!-- Scripts -->
     
