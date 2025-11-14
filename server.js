@@ -222,7 +222,21 @@ function updatePropertiesTableStructure() {
         'andamento_obra TEXT',
         'previsao_entrega TEXT',
         'entrada_minima DECIMAL(10,2)',
-        "categoria TEXT DEFAULT 'lancamentos'"
+        "categoria TEXT DEFAULT 'lancamentos'",
+        // Colunas em inglês para compatibilidade
+        'description TEXT',
+        'price_type TEXT',
+        'property_type TEXT',
+        'bedrooms INTEGER',
+        'bathrooms INTEGER',
+        'parking_spaces INTEGER',
+        'address TEXT',
+        'neighborhood TEXT',
+        'city TEXT',
+        'state TEXT',
+        'features TEXT',
+        'highlight BOOLEAN DEFAULT 0',
+        'category TEXT'
     ];
 
     // Verificar quais colunas já existem
@@ -664,13 +678,13 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
         const propertyId = await new Promise((resolve, reject) => {
             db.run(`
                 INSERT INTO properties (
-                    title, descricao, finalidade, tipo, price, quartos, suites, banheiros,
-                    vagas, area, endereco, bairro, cidade, estado, caracteristicas,
+                    title, description, price_type, property_type, price, bedrooms, bathrooms,
+                    parking_spaces, area, address, neighborhood, city, state, features,
                     ano_construcao, iptu_mensal, condominio_mensal, situacao_imovel,
                     opcoes_financiamento, disponibilidade, andamento_obra, previsao_entrega,
                     entrada_minima, images, video_url, virtual_tour_url, status, 
-                    destaque, categoria, created_by
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    highlight, category, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [
                 title, 
                 description || '', 
@@ -678,7 +692,6 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
                 property_type, 
                 price, 
                 bedrooms || 0, 
-                bedrooms || 0, // suites (usar mesmo valor de bedrooms por enquanto)
                 bathrooms || 0,
                 parking_spaces || 0, 
                 area, 
@@ -706,6 +719,7 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
             ], function(err) {
                 if (err) {
                     console.error('❌ Erro no INSERT:', err.message);
+                    console.error('❌ Detalhes do erro:', err);
                     reject(err);
                 } else {
                     console.log('✅ Imóvel inserido com ID:', this.lastID);
