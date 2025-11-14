@@ -535,8 +535,8 @@ class PropertySystemFinal {
 
 // Funções globais para interação
 function viewProperty(propertyId) {
-    // Implementar navegação para página de detalhes
-
+    // Redirecionar para página de detalhes
+    window.location.href = `property-details.html?id=${propertyId}`;
 }
 
 function contactProperty(propertyId) {

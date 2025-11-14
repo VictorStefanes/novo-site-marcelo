@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Imóvel - Corretor Marcelo</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/property-details.css">
+    
+    <!-- Configuração da API -->
+    <script src="../js/config.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="container nav-container">
+                <div class="logo">
+                    <a href="../index.html">
+                        <i class="fas fa-building"></i>
+                        <span>Corretor Marcelo</span>
+                    </a>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="../index.html">Início</a></li>
+                    <li><a href="lancamentos.html">Lançamentos</a></li>
+                    <li><a href="beira-mar.html">Beira-Mar</a></li>
+                    <li><a href="mais-procurados.html">Mais Procurados</a></li>
+                    <li><a href="#contato" class="btn-contact-nav">
+                        <i class="fab fa-whatsapp"></i> Contato
+                    </a></li>
+                </ul>
+                
+                <button class="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="breadcrumb-section">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="../index.html"><i class="fas fa-home"></i> Início</a>
+                <span class="separator">/</span>
+                <a href="#" id="breadcrumbCategory">Imóveis</a>
+                <span class="separator">/</span>
+                <span id="breadcrumbTitle">Detalhes</span>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Property Details -->
+    <section class="property-details-section">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="spinner"></div>
+                <p>Carregando detalhes do imóvel...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Imóvel não encontrado</h3>
+                <p>O imóvel que você está procurando não está disponível.</p>
+                <a href="../index.html" class="btn-primary">Voltar ao Início</a>
+            </div>
+
+            <!-- Property Content -->
+            <div id="propertyContent" class="property-content" style="display: none;">
+                <!-- Layout Principal -->
+                <div class="property-layout">
+                    <!-- Coluna Esquerda - Galeria de Fotos -->
+                    <div class="property-gallery-column">
+                        <!-- Galeria Principal -->
+                        <div class="main-gallery">
+                            <div class="main-image-container">
+                                <img id="mainImage" src="" alt="Imagem Principal">
+                                <button class="gallery-nav-btn prev-btn" id="prevImageBtn">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <button class="gallery-nav-btn next-btn" id="nextImageBtn">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                                <div class="image-counter" id="imageCounter">1 / 1</div>
+                            </div>
+                            
+                            <!-- Miniaturas -->
+                            <div class="thumbnails-container" id="thumbnailsContainer">
+                                <!-- Thumbnails serão inseridas aqui -->
+                            </div>
+                        </div>
+
+                        <!-- Vídeo e Tour Virtual -->
+                        <div class="media-extras" id="mediaExtras" style="display: none;">
+                            <div class="video-container" id="videoContainer" style="display: none;">
+                                <h3><i class="fas fa-video"></i> Vídeo do Imóvel</h3>
+                                <div class="video-embed" id="videoEmbed"></div>
+                            </div>
+                            
+                            <div class="virtual-tour-container" id="virtualTourContainer" style="display: none;">
+                                <h3><i class="fas fa-vr-cardboard"></i> Tour Virtual 360°</h3>
+                                <div class="virtual-tour-embed" id="virtualTourEmbed"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coluna Direita - Informações -->
+                    <div class="property-info-column">
+                        <!-- Cabeçalho -->
+                        <div class="property-header">
+                            <div class="property-title-section">
+                                <h1 id="propertyTitle">Carregando...</h1>
+                                <div class="property-meta">
+                                    <span class="property-code" id="propertyCode">Código: --</span>
+                                    <span class="property-category" id="propertyCategory">--</span>
+                                </div>
+                            </div>
+                            <div class="property-price-section">
+                                <div class="price" id="propertyPrice">R$ 0,00</div>
+                                <div class="price-type" id="priceType">Venda</div>
+                            </div>
+                        </div>
+
+                        <!-- Localização -->
+                        <div class="property-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="propertyLocation">Localização</span>
+                        </div>
+
+                        <!-- Características Principais -->
+                        <div class="property-main-features">
+                            <div class="feature-item">
+                                <i class="fas fa-bed"></i>
+                                <div>
+                                    <span class="feature-value" id="bedrooms">0</span>
+                                    <span class="feature-label">Quartos</span>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-bath"></i>
+                                <div>
+                                    <span class="feature-value" id="bathrooms">0</span>
+                                    <span class="feature-label">Banheiros</span>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-car"></i>
+                                <div>
+                                    <span class="feature-value" id="parkingSpaces">0</span>
+                                    <span class="feature-label">Vagas</span>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-ruler-combined"></i>
+                                <div>
+                                    <span class="feature-value" id="area">0</span>
+                                    <span class="feature-label">m²</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulário de Contato -->
+                        <div class="contact-card">
+                            <div class="contact-header">
+                                <i class="fas fa-user-tie"></i>
+                                <div>
+                                    <h3>Interessado neste imóvel?</h3>
+                                    <p>Entre em contato comigo!</p>
+                                </div>
+                            </div>
+                            
+                            <form id="contactForm" class="contact-form">
+                                <div class="form-group">
+                                    <input type="text" id="clientName" placeholder="Seu nome" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="tel" id="clientPhone" placeholder="Seu telefone/WhatsApp" required>
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="clientMessage" rows="3" placeholder="Mensagem (opcional)"></textarea>
+                                </div>
+                                <button type="submit" class="btn-whatsapp">
+                                    <i class="fab fa-whatsapp"></i>
+                                    Enviar Mensagem via WhatsApp
+                                </button>
+                            </form>
+
+                            <div class="direct-contact">
+                                <p>Ou ligue diretamente:</p>
+                                <a href="tel:5582988780126" class="phone-link">
+                                    <i class="fas fa-phone"></i>
+                                    (82) 98878-0126
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Informações Financeiras -->
+                        <div class="financial-info" id="financialInfo" style="display: none;">
+                            <h3><i class="fas fa-dollar-sign"></i> Informações Financeiras</h3>
+                            <div class="financial-grid">
+                                <div class="financial-item" id="iptuItem" style="display: none;">
+                                    <span class="label">IPTU Mensal:</span>
+                                    <span class="value" id="iptuValue">--</span>
+                                </div>
+                                <div class="financial-item" id="condominioItem" style="display: none;">
+                                    <span class="label">Condomínio:</span>
+                                    <span class="value" id="condominioValue">--</span>
+                                </div>
+                                <div class="financial-item" id="entradaItem" style="display: none;">
+                                    <span class="label">Entrada Mínima:</span>
+                                    <span class="value" id="entradaValue">--</span>
+                                </div>
+                                <div class="financial-item" id="financiamentoItem" style="display: none;">
+                                    <span class="label">Financiamento:</span>
+                                    <span class="value" id="financiamentoValue">--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descrição Completa -->
+                <div class="property-description-section">
+                    <h2><i class="fas fa-align-left"></i> Descrição</h2>
+                    <div class="description-content" id="propertyDescription">
+                        <p>Carregando descrição...</p>
+                    </div>
+                </div>
+
+                <!-- Características e Comodidades -->
+                <div class="property-features-section" id="featuresSection" style="display: none;">
+                    <h2><i class="fas fa-list-check"></i> Características e Comodidades</h2>
+                    <div class="features-grid" id="featuresGrid">
+                        <!-- Features serão inseridas aqui -->
+                    </div>
+                </div>
+
+                <!-- Informações Adicionais -->
+                <div class="additional-info-section" id="additionalInfoSection" style="display: none;">
+                    <h2><i class="fas fa-info-circle"></i> Informações Adicionais</h2>
+                    <div class="additional-info-grid">
+                        <div class="info-item" id="anoItem" style="display: none;">
+                            <i class="fas fa-calendar"></i>
+                            <div>
+                                <span class="label">Ano de Construção</span>
+                                <span class="value" id="anoValue">--</span>
+                            </div>
+                        </div>
+                        <div class="info-item" id="disponibilidadeItem" style="display: none;">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <span class="label">Disponibilidade</span>
+                                <span class="value" id="disponibilidadeValue">--</span>
+                            </div>
+                        </div>
+                        <div class="info-item" id="situacaoItem" style="display: none;">
+                            <i class="fas fa-home"></i>
+                            <div>
+                                <span class="label">Situação</span>
+                                <span class="value" id="situacaoValue">--</span>
+                            </div>
+                        </div>
+                        <div class="info-item" id="previsaoItem" style="display: none;">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>
+                                <span class="label">Previsão de Entrega</span>
+                                <span class="value" id="previsaoValue">--</span>
+                            </div>
+                        </div>
+                        <div class="info-item" id="andamentoItem" style="display: none;">
+                            <i class="fas fa-hard-hat"></i>
+                            <div>
+                                <span class="label">Andamento da Obra</span>
+                                <span class="value" id="andamentoValue">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão de Compartilhar -->
+                <div class="share-section">
+                    <h3><i class="fas fa-share-alt"></i> Compartilhar este imóvel</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn whatsapp" onclick="shareProperty('whatsapp')">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <button class="share-btn facebook" onclick="shareProperty('facebook')">
+                            <i class="fab fa-facebook"></i>
+                        </button>
+                        <button class="share-btn twitter" onclick="shareProperty('twitter')">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="share-btn link" onclick="shareProperty('copy')">
+                            <i class="fas fa-link"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Corretor Marcelo</h3>
+                    <p>Seu parceiro ideal para encontrar o imóvel dos seus sonhos em João Pessoa.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-phone"></i> (82) 98878-0126</p>
+                    <p><i class="fas fa-envelope"></i> contato@corretormarcelo.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Corretor Marcelo. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/property-details.js"></script>
+</body>
+</html>
