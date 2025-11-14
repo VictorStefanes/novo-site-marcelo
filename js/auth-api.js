@@ -140,7 +140,7 @@ class AuthManager {
         const session = {
             user: user,
             token: jwtToken,
-            expires: new Date().getTime() + (24 * 60 * 60 * 1000), // 24 horas
+            expires: new Date().getTime() + (365 * 24 * 60 * 60 * 1000), // 365 dias (1 ano)
             created: new Date().toISOString(),
             isValid: true
         };
@@ -154,7 +154,7 @@ class AuthManager {
         this.currentUser = user;
         
         console.log('✅ Sessão criada para:', user.name);
-        console.log('🔑 Token JWT salvo:', jwtToken.substring(0, 20) + '...');
+        console.log('🔑 Token JWT salvo (válido por 365 dias)');
     }
 
     // Gerar token simples

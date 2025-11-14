@@ -383,11 +383,11 @@
                     const data = await response.json();
 
                     if (data.success) {
-                        // Criar sessão local
+                        // Criar sessão local (válida por 365 dias)
                         const session = {
                             user: data.user,
                             token: data.token,
-                            expires: new Date().getTime() + (24 * 60 * 60 * 1000),
+                            expires: new Date().getTime() + (365 * 24 * 60 * 60 * 1000),
                             created: new Date().toISOString(),
                             isValid: true
                         };
@@ -395,7 +395,7 @@
                         localStorage.setItem('marceloImoveis_session', JSON.stringify(session));
                         localStorage.setItem('token', data.token);
 
-                        this.showMessage('✅ Conta criada com sucesso! Redirecionando para o dashboard...', 'success');
+                        this.showMessage('✅ Conta criada! Login válido por 1 ano. Redirecionando...', 'success');
                         
                         // Redirecionar após sucesso
                         setTimeout(() => {

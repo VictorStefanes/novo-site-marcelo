@@ -2,17 +2,24 @@
 
 ## 📋 Usuários Cadastrados
 
+### ⭐ MARCELO CORRETOR (CLIENTE - USO PRINCIPAL)
+- **E-mail:** `marcelocorretor@marceloimoveis.com`
+- **Senha:** `marcelo0101!`
+- **Permissões:** Acesso total ao dashboard (Owner)
+- **Uso:** Conta principal do cliente para gerenciar o site
+- **Token:** Válido por 365 dias (login persistente)
+
 ### 👑 Administrador (Acesso Total)
 - **E-mail:** `admin@marceloimoveis.com`
 - **Senha:** `admin123`
 - **Permissões:** Todas as funcionalidades do sistema
 - **Uso:** Gestão completa da plataforma
 
-### ⭐ Proprietário/Dono (Marcelo)
+### 🏠 Proprietário/Dono (Marcelo)
 - **E-mail:** `marcelo@marceloimoveis.com`
 - **Senha:** `marcelo123`
 - **Permissões:** Gerenciar imóveis, leads, vendas, relatórios
-- **Uso:** Conta principal do dono do negócio
+- **Uso:** Conta alternativa do dono do negócio
 
 ### 👨‍💼 Corretor
 - **E-mail:** `corretor@marceloimoveis.com`
@@ -35,10 +42,11 @@
 
 ### ✅ **Recursos Implementados:**
 
-- **Login com JWT**: Token de autenticação válido por 24 horas
-- **Sessão Persistente**: "Lembrar de mim" mantém login ativo
+- **Login com JWT**: Token de autenticação válido por **365 dias (1 ano)**
+- **Sessão Persistente**: Login salvo no localStorage do navegador
 - **Logout Seguro**: Limpa token e sessão completamente
 - **Proteção de Rotas**: Dashboard só acessível com login
+- **Login Automático**: Não precisa fazer login todo dia
 - **Menu do Usuário**: Dropdown com opções de perfil e sair
 
 ### 🔧 **Endpoints da API:**

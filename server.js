@@ -436,11 +436,11 @@ app.post('/api/auth/register', async (req, res) => {
             });
         });
 
-        // Gerar token JWT
+        // Gerar token JWT (365 dias para login persistente)
         const token = jwt.sign(
             { userId, email, name, role: 'client' },
             JWT_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '365d' }
         );
 
         // Enviar email de boas-vindas (não bloquear se falhar)
@@ -511,11 +511,11 @@ app.post('/api/auth/login', async (req, res) => {
         // Atualizar último login
         db.run('UPDATE users SET last_login = CURRENT_TIMESTAMP WHERE id = ?', [user.id]);
 
-        // Gerar token
+        // Gerar token (365 dias para login persistente)
         const token = jwt.sign(
             { userId: user.id, email: user.email, name: user.name, role: user.role },
             JWT_SECRET,
-            { expiresIn: '24h' }
+            { expiresIn: '365d' }
         );
 
         res.json({
