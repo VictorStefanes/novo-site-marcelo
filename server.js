@@ -220,7 +220,8 @@ function updatePropertiesTableStructure() {
         'disponibilidade TEXT',
         'andamento_obra TEXT',
         'previsao_entrega TEXT',
-        'entrada_minima DECIMAL(10,2)'
+        'entrada_minima DECIMAL(10,2)',
+        "categoria TEXT DEFAULT 'lancamentos'"
     ];
 
     // Verificar quais colunas já existem
