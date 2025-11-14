@@ -774,7 +774,7 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
             data: { id: propertyId }
         });
 
-        console.log('✅ Novo imóvel criado:', propertyId, 'por', req.user.email);
+        console.log('✅ Novo imóvel criado:', propertyId, 'por', req.user.username || req.user.email);
 
     } catch (error) {
         console.error('❌ Erro ao criar imóvel:', error.message);
@@ -861,7 +861,7 @@ app.put('/api/properties/:id', authenticateToken, async (req, res) => {
             message: 'Imóvel atualizado com sucesso!'
         });
 
-        console.log('✅ Imóvel atualizado:', id, 'por', req.user.email);
+        console.log('✅ Imóvel atualizado:', id, 'por', req.user.username || req.user.email);
 
     } catch (error) {
         console.error('❌ Erro ao atualizar imóvel:', error.message);
@@ -892,8 +892,8 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
             });
         }
 
-        // Verificar permissão (apenas criador ou admin)
-        if (existingProperty.created_by !== req.user.userId && req.user.role !== 'admin') {
+        // Verificar permissão (owner e admin podem deletar qualquer imóvel)
+        if (req.user.role !== 'owner' && req.user.role !== 'admin' && existingProperty.created_by !== req.user.userId) {
             return res.status(403).json({
                 success: false,
                 message: 'Sem permissão para deletar este imóvel'
@@ -912,7 +912,7 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
             message: 'Imóvel deletado com sucesso!'
         });
 
-        console.log('✅ Imóvel deletado:', id, 'por', req.user.email);
+        console.log('✅ Imóvel deletado:', id, 'por', req.user.username || req.user.email);
 
     } catch (error) {
         console.error('❌ Erro ao deletar imóvel:', error.message);
