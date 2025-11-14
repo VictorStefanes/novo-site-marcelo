@@ -10,7 +10,7 @@ const isDevelopment = window.location.hostname === 'localhost' ||
 // URL da API baseada no ambiente
 const API_URL = isDevelopment 
     ? 'http://localhost:3000'  // Desenvolvimento local
-    : 'https://marcelo-imoveis-api.onrender.com';  // Produção (ATUALIZAR COM SUA URL DO RENDER)
+    : 'https://SEU-BACKEND-AQUI.onrender.com';  // 👈 ATUALIZAR COM A URL DO RENDER APÓS DEPLOY
 
 // Configuração de debug
 const DEBUG_MODE = isDevelopment;
