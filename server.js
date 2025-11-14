@@ -647,10 +647,7 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
             // Mídia
             images = [],
             video_url,
-            virtual_tour_url,
-            status = 'disponivel',
-            destaque = false,
-            categoria = 'lancamentos'
+            virtual_tour_url
         } = req.body;
 
         // Validações
