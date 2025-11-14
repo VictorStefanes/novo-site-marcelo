@@ -466,6 +466,122 @@ body {
 }
 
 /* ========================================
+   ZONA DE PERIGO
+======================================== */
+
+.danger-zone {
+    margin-top: 20px;
+}
+
+.danger-card {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border: 2px solid #ef4444;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    transition: all 0.3s ease;
+}
+
+.danger-card:hover {
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+    transform: translateY(-2px);
+}
+
+.danger-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.danger-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.danger-icon i {
+    font-size: 28px;
+    color: white;
+}
+
+.danger-info h3 {
+    margin: 0 0 8px 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #991b1b;
+}
+
+.danger-info p {
+    margin: 0;
+    color: #7f1d1d;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.btn-danger {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-danger:active {
+    transform: translateY(0);
+}
+
+.btn-danger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-danger i {
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .danger-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .danger-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .btn-danger {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ========================================
    RESPONSIVE
 ======================================== */
 

@@ -611,6 +611,32 @@
                         <p>Backup e restauração</p>
                     </div>
                 </div>
+
+                <!-- Zona de Perigo -->
+                <div class="section-title" style="margin-top: 40px; border-top: 2px solid #ef4444; padding-top: 40px;">
+                    <h2 style="color: #ef4444;">
+                        <i class="fas fa-exclamation-triangle"></i> Zona de Perigo
+                    </h2>
+                    <p>Ações irreversíveis que afetam todo o sistema</p>
+                </div>
+
+                <div class="danger-zone">
+                    <div class="danger-card">
+                        <div class="danger-content">
+                            <div class="danger-icon">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                            <div class="danger-info">
+                                <h3>Limpar Todos os Imóveis</h3>
+                                <p>Remove permanentemente TODOS os imóveis do banco de dados. Esta ação não pode ser desfeita!</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-danger" id="clearAllPropertiesBtn">
+                            <i class="fas fa-trash"></i>
+                            Limpar Banco de Dados
+                        </button>
+                    </div>
+                </div>
             </section>
         </div>
     </main>
@@ -1063,6 +1089,72 @@
                 } catch (error) {
                     console.error('Erro ao carregar dados do usuário:', error);
                 }
+            }
+        });
+
+        // ========================================
+        // BOTÃO DE LIMPAR TODOS OS IMÓVEIS
+        // ========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const clearBtn = document.getElementById('clearAllPropertiesBtn');
+            
+            if (clearBtn) {
+                clearBtn.addEventListener('click', async function() {
+                    // Primeira confirmação
+                    const confirm1 = confirm('⚠️ ATENÇÃO!\n\nVocê está prestes a DELETAR TODOS OS IMÓVEIS do banco de dados.\n\nEsta ação é PERMANENTE e não pode ser desfeita!\n\nDeseja continuar?');
+                    
+                    if (!confirm1) return;
+                    
+                    // Segunda confirmação (segurança extra)
+                    const confirm2 = prompt('Para confirmar, digite: DELETAR TUDO');
+                    
+                    if (confirm2 !== 'DELETAR TUDO') {
+                        alert('❌ Operação cancelada. Texto de confirmação incorreto.');
+                        return;
+                    }
+                    
+                    try {
+                        clearBtn.disabled = true;
+                        clearBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Limpando...';
+                        
+                        const session = localStorage.getItem('marceloImoveis_session');
+                        if (!session) {
+                            alert('❌ Sessão expirada. Faça login novamente.');
+                            window.location.href = 'login.html';
+                            return;
+                        }
+                        
+                        const sessionData = JSON.parse(session);
+                        const token = sessionData.token;
+                        
+                        const response = await fetch(`${window.API_URL}/api/admin/clear-properties`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        const data = await response.json();
+                        
+                        if (data.success) {
+                            alert(`✅ ${data.message}\n\n📊 Imóveis deletados: ${data.deleted}\n📊 Imóveis restantes: ${data.remaining}`);
+                            
+                            // Recarregar a página para atualizar a lista
+                            window.location.reload();
+                        } else {
+                            alert(`❌ Erro: ${data.message}`);
+                            clearBtn.disabled = false;
+                            clearBtn.innerHTML = '<i class="fas fa-trash"></i> Limpar Banco de Dados';
+                        }
+                        
+                    } catch (error) {
+                        console.error('Erro ao limpar imóveis:', error);
+                        alert('❌ Erro ao conectar com o servidor. Tente novamente.');
+                        clearBtn.disabled = false;
+                        clearBtn.innerHTML = '<i class="fas fa-trash"></i> Limpar Banco de Dados';
+                    }
+                });
             }
         });
     </script>

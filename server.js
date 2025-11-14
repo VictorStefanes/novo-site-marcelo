@@ -1153,6 +1153,78 @@ app.get('/api/dashboard/top-properties', authenticateToken, (req, res) => {
     }
 });
 
+// ============================================
+// ADMIN: Limpar todos os imóveis (apenas owner)
+// ============================================
+app.delete('/api/admin/clear-properties', authenticateToken, async (req, res) => {
+    try {
+        console.log('🗑️  Requisição para limpar todos os imóveis');
+        console.log('👤 Usuário:', req.user.username, '| Role:', req.user.role);
+
+        // Só owner pode limpar o banco
+        if (req.user.role !== 'owner') {
+            console.log('❌ Permissão negada: apenas owner pode limpar');
+            return res.status(403).json({
+                success: false,
+                message: 'Apenas o proprietário pode limpar todos os imóveis'
+            });
+        }
+
+        // Contar quantos imóveis serão deletados
+        const countBefore = await new Promise((resolve, reject) => {
+            db.get('SELECT COUNT(*) as total FROM properties', [], (err, row) => {
+                if (err) reject(err);
+                else resolve(row.total);
+            });
+        });
+
+        console.log(`📊 Imóveis a serem deletados: ${countBefore}`);
+
+        // Deletar todos os imóveis
+        await new Promise((resolve, reject) => {
+            db.run('DELETE FROM properties', [], function(err) {
+                if (err) reject(err);
+                else resolve(this.changes);
+            });
+        });
+
+        // Resetar o contador de IDs
+        await new Promise((resolve, reject) => {
+            db.run("DELETE FROM sqlite_sequence WHERE name='properties'", [], (err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
+
+        // Verificar se está vazio
+        const countAfter = await new Promise((resolve, reject) => {
+            db.get('SELECT COUNT(*) as total FROM properties', [], (err, row) => {
+                if (err) reject(err);
+                else resolve(row.total);
+            });
+        });
+
+        console.log('✅ Banco limpo com sucesso');
+        console.log(`📊 Imóveis deletados: ${countBefore}`);
+        console.log(`📊 Imóveis restantes: ${countAfter}`);
+
+        res.json({
+            success: true,
+            message: 'Todos os imóveis foram removidos com sucesso',
+            deleted: countBefore,
+            remaining: countAfter
+        });
+
+    } catch (error) {
+        console.error('❌ Erro ao limpar imóveis:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Erro ao limpar imóveis',
+            error: error.message
+        });
+    }
+});
+
 // Helper function para calcular "tempo atrás"
 function getTimeAgo(date) {
     const seconds = Math.floor((new Date() - date) / 1000);
