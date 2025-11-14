@@ -380,7 +380,14 @@ function authenticateToken(req, res, next) {
 // ========================================
 
 // Rota de registro
+// Rota de registro DESABILITADA - Apenas 1 usuário administrador permitido
 app.post('/api/auth/register', async (req, res) => {
+    return res.status(403).json({
+        success: false,
+        message: 'Registro de novos usuários desabilitado. Entre em contato com o administrador.'
+    });
+
+    /* CÓDIGO ORIGINAL COMENTADO
     const { email, password, name } = req.body;
 
     // Validações
@@ -390,6 +397,7 @@ app.post('/api/auth/register', async (req, res) => {
             message: 'Todos os campos são obrigatórios'
         });
     }
+    */
 
     if (password.length < 6) {
         return res.status(400).json({
@@ -471,21 +479,24 @@ app.post('/api/auth/register', async (req, res) => {
     }
 });
 
-// Rota de login
+// Rota de login (aceita username ao invés de email)
 app.post('/api/auth/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password, email } = req.body;
+    
+    // Aceitar tanto 'username' quanto 'email' para retrocompatibilidade
+    const loginIdentifier = username || email;
 
-    if (!email || !password) {
+    if (!loginIdentifier || !password) {
         return res.status(400).json({
             success: false,
-            message: 'Email e senha são obrigatórios'
+            message: 'Usuário e senha são obrigatórios'
         });
     }
 
     try {
-        // Buscar usuário
+        // Buscar usuário (campo 'email' agora armazena o username)
         const user = await new Promise((resolve, reject) => {
-            db.get('SELECT * FROM users WHERE email = ? AND is_active = 1', [email], (err, row) => {
+            db.get('SELECT * FROM users WHERE email = ? AND is_active = 1', [loginIdentifier], (err, row) => {
                 if (err) reject(err);
                 else resolve(row);
             });
@@ -494,7 +505,7 @@ app.post('/api/auth/login', async (req, res) => {
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: 'Email ou senha incorretos'
+                message: 'Usuário ou senha incorretos'
             });
         }
 
@@ -504,7 +515,7 @@ app.post('/api/auth/login', async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
-                message: 'Email ou senha incorretos'
+                message: 'Usuário ou senha incorretos'
             });
         }
 
@@ -513,7 +524,7 @@ app.post('/api/auth/login', async (req, res) => {
 
         // Gerar token (365 dias para login persistente)
         const token = jwt.sign(
-            { userId: user.id, email: user.email, name: user.name, role: user.role },
+            { userId: user.id, username: user.email, name: user.name, role: user.role },
             JWT_SECRET,
             { expiresIn: '365d' }
         );
@@ -523,7 +534,7 @@ app.post('/api/auth/login', async (req, res) => {
             message: 'Login realizado com sucesso!',
             user: {
                 id: user.id,
-                email: user.email,
+                username: user.email, // Campo 'email' armazena o username
                 name: user.name,
                 role: user.role
             },
@@ -531,7 +542,7 @@ app.post('/api/auth/login', async (req, res) => {
             redirect: '/html/dashboard.html'
         });
 
-        console.log('✅ Login realizado:', email);
+        console.log('✅ Login realizado:', loginIdentifier);
 
     } catch (error) {
         console.error('❌ Erro no login:', error.message);

@@ -49,10 +49,10 @@ class AuthManager {
     async handleLogin(e) {
         e.preventDefault();
         
-        const email = document.getElementById('email')?.value;
+        const username = document.getElementById('username')?.value || document.getElementById('email')?.value;
         const password = document.getElementById('password')?.value;
         
-        if (!email || !password) {
+        if (!username || !password) {
             this.showMessage('Preencha todos os campos', 'error');
             return;
         }
@@ -65,7 +65,7 @@ class AuthManager {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ username, password })
             });
 
             const data = await response.json();
@@ -87,49 +87,17 @@ class AuthManager {
 
         } catch (error) {
             console.error('❌ Erro no login:', error);
-            
-            // Fallback para credenciais locais se API não estiver disponível
-            const isValidLocal = await this.validateCredentialsLocal(email, password);
-            if (isValidLocal) {
-                this.showMessage('✅ Login realizado (modo offline)', 'success');
-                setTimeout(() => {
-                    this.redirectToDashboard();
-                }, 1000);
-            } else {
-                this.showMessage('Erro de conexão. Verifique se o servidor está rodando.', 'error');
-            }
+            this.showMessage('Erro de conexão. Verifique se o servidor está rodando.', 'error');
         } finally {
             this.setLoading(false);
         }
-    }
-
-    // Validação local (fallback)
-    async validateCredentialsLocal(email, password) {
-        console.log('🔄 Usando validação local como fallback');
-        
-        const validCredentials = [
-            { email: 'admin@marceloimoveis.com', password: 'admin123', name: 'Administrador', role: 'admin' },
-            { email: 'marcelo@marceloimoveis.com', password: 'marcelo2024', name: 'Marcelo', role: 'owner' },
-            { email: 'corretor@marceloimoveis.com', password: 'corretor123', name: 'Corretor', role: 'corretor' }
-        ];
-        
-        const user = validCredentials.find(cred => 
-            cred.email === email && cred.password === password
-        );
-        
-        if (user) {
-            this.createSession(user, 'LOCAL_TOKEN_' + Date.now());
-            return true;
-        }
-        
-        return false;
     }
 
     // Criar sessão do usuário
     createSession(userData, token = null) {
         const user = {
             id: userData.id || Date.now(),
-            email: userData.email,
+            username: userData.username || userData.email,
             name: userData.name,
             role: userData.role,
             loginTime: new Date().toISOString()
@@ -154,6 +122,7 @@ class AuthManager {
         this.currentUser = user;
         
         console.log('✅ Sessão criada para:', user.name);
+        console.log('👤 Usuário:', user.username);
         console.log('🔑 Token JWT salvo (válido por 365 dias)');
     }
 

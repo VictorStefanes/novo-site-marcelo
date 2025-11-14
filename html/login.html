@@ -50,22 +50,22 @@
                 </div>
 
                 <form id="loginForm" class="login-form-content" novalidate>
-                    <!-- Email Field -->
+                    <!-- Username Field -->
                     <div class="form-group">
-                        <label for="email" class="form-label">
-                            <i class="fas fa-envelope"></i>
-                            E-mail
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user"></i>
+                            Usuário
                         </label>
                         <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
+                            type="text" 
+                            id="username" 
+                            name="username" 
                             class="form-input" 
-                            placeholder="seu@email.com"
+                            placeholder="Digite seu usuário"
                             required
-                            autocomplete="email"
+                            autocomplete="username"
                         >
-                        <div class="error-message" id="emailError"></div>
+                        <div class="error-message" id="usernameError"></div>
                     </div>
 
                     <!-- Password Field -->
@@ -118,13 +118,9 @@
 
                 <!-- Footer Links -->
                 <div class="login-footer">
-                    <p style="text-align: center; margin-bottom: 1rem; color: rgba(255,255,255,0.7);">
-                        Não tem conta? 
-                        <a href="register.html" style="color: #d4af37; text-decoration: none; font-weight: 600;">
-                            <i class="fas fa-user-plus"></i> Criar Conta
-                        </a>
+                    <p style="text-align: center; margin-bottom: 1rem; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+                        <i class="fas fa-shield-alt"></i> Acesso restrito ao administrador
                     </p>
-                    <p>Precisa de ajuda? <a href="#" id="supportLink">Entre em contato</a></p>
                     <div class="back-to-site">
                         <a href="../index.html" class="back-link">
                             <i class="fas fa-arrow-left"></i>
