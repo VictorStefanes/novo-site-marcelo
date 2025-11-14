@@ -745,9 +745,13 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
 
     } catch (error) {
         console.error('❌ Erro ao criar imóvel:', error.message);
+        console.error('❌ Stack completo:', error.stack);
+        console.error('❌ Erro completo:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
         res.status(500).json({
             success: false,
-            message: 'Erro interno do servidor'
+            message: 'Erro interno do servidor',
+            error: error.message,
+            details: error.stack
         });
     }
 });
