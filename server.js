@@ -530,31 +530,37 @@ app.get('/api/properties', async (req, res) => {
     }
 });
 
-// Rota para buscar propriedades para página inicial (últimas por categoria)
+// Rota para buscar os 5 imóveis mais recentes por categoria (para index.html)
 app.get('/api/properties/home', async (req, res) => {
     try {
-        const categories = ['mais-procurados', 'lancamentos', 'beira-mar'];
+        const categories = ['lancamentos', 'beira-mar', 'mais-procurados'];
         const result = {};
 
         for (const category of categories) {
             const query = `
                 SELECT * FROM properties 
-                WHERE category = ? AND status = 'active' 
+                WHERE categoria = ? AND status = 'disponivel'
                 ORDER BY created_at DESC 
-                LIMIT 4
+                LIMIT 5
             `;
             const properties = await new Promise((resolve, reject) => {
                 db.all(query, [category], (err, rows) => {
                     if (err) reject(err);
-                    else resolve(rows);
+                    else resolve(rows || []);
                 });
             });
-            result[category] = properties;
+            
+            // Parse images para cada propriedade
+            const processedProperties = properties.map(prop => ({
+                ...prop,
+                images: prop.images ? JSON.parse(prop.images) : []
+            }));
+            
+            result[category] = processedProperties;
         }
 
-        // Retornar todas as propriedades em um array simples para as páginas
-        const allProperties = Object.values(result).flat();
-        res.json(allProperties);
+        // Retornar objeto com arrays separados por categoria
+        res.json(result);
 
     } catch (error) {
         console.error('❌ Erro ao buscar propriedades para home:', error.message);
