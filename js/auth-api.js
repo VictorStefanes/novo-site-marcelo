@@ -49,7 +49,7 @@ class AuthManager {
     async handleLogin(e) {
         e.preventDefault();
         
-        const username = document.getElementById('username')?.value || document.getElementById('email')?.value;
+        const username = document.getElementById('username')?.value;
         const password = document.getElementById('password')?.value;
         
         if (!username || !password) {
@@ -96,8 +96,8 @@ class AuthManager {
     // Criar sessão do usuário
     createSession(userData, token = null) {
         const user = {
-            id: userData.id || Date.now(),
-            username: userData.username || userData.email,
+            id: userData.id,
+            username: userData.username,
             name: userData.name,
             role: userData.role,
             loginTime: new Date().toISOString()

@@ -1,19 +1,20 @@
-# 🔐 SISTEMA SIMPLIFICADO - ÚNICO USUÁRIO
+# 🔐 MARCELO IMÓVEIS - DOCUMENTAÇÃO DEFINITIVA
 
-## ✅ CONFIGURAÇÃO ATUAL
+## ✅ SISTEMA SIMPLIFICADO E LIMPO
 
-O sistema foi **completamente simplificado** para ter apenas **1 usuário administrador**.
+O sistema foi **completamente limpo e simplificado** para ter apenas **1 usuário administrador**.
 
 ---
 
-## 👤 CREDENCIAIS DO ÚNICO USUÁRIO
+## 👤 CREDENCIAIS DE ACESSO
 
 ```
+📧 URL: https://corretormarcelo.netlify.app/html/login.html
 👤 Usuário: marcelocorretor
 🔑 Senha: marcelo0101!
 👨‍💼 Nome: Marcelo Corretor
 🎭 Função: Owner (Controle Total)
-⏰ Token: Válido por 365 dias
+⏰ Sessão: 365 dias (1 ano)
 ```
 
 ---

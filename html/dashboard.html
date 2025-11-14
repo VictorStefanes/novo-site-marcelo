@@ -1049,7 +1049,7 @@
                         }
                     });
                     
-                    // Atualizar email no menu
+                    // Atualizar informações no menu
                     const menuName = document.querySelector('.user-menu-name');
                     const menuEmail = document.querySelector('.user-menu-email');
                     
@@ -1057,8 +1057,8 @@
                         menuName.textContent = user.name;
                     }
                     
-                    if (menuEmail && user && user.email) {
-                        menuEmail.textContent = user.email;
+                    if (menuEmail && user && user.username) {
+                        menuEmail.textContent = '@' + user.username;
                     }
                 } catch (error) {
                     console.error('Erro ao carregar dados do usuário:', error);

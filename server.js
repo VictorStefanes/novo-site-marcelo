@@ -380,113 +380,19 @@ function authenticateToken(req, res, next) {
 // ========================================
 
 // Rota de registro
-// Rota de registro DESABILITADA - Apenas 1 usuário administrador permitido
+// Rota de registro DESABILITADA - Sistema com único usuário administrador
 app.post('/api/auth/register', async (req, res) => {
-    return res.status(403).json({
+    res.status(403).json({
         success: false,
-        message: 'Registro de novos usuários desabilitado. Entre em contato com o administrador.'
+        message: 'Registro de novos usuários desabilitado. Sistema configurado para uso exclusivo.'
     });
-
-    /* CÓDIGO ORIGINAL COMENTADO
-    const { email, password, name } = req.body;
-
-    // Validações
-    if (!email || !password || !name) {
-        return res.status(400).json({
-            success: false,
-            message: 'Todos os campos são obrigatórios'
-        });
-    }
-    */
-
-    if (password.length < 6) {
-        return res.status(400).json({
-            success: false,
-            message: 'Senha deve ter pelo menos 6 caracteres'
-        });
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        return res.status(400).json({
-            success: false,
-            message: 'Email inválido'
-        });
-    }
-
-    try {
-        // Verificar se email já existe
-        const existingUser = await new Promise((resolve, reject) => {
-            db.get('SELECT id FROM users WHERE email = ?', [email], (err, row) => {
-                if (err) reject(err);
-                else resolve(row);
-            });
-        });
-
-        if (existingUser) {
-            return res.status(409).json({
-                success: false,
-                message: 'Email já está em uso'
-            });
-        }
-
-        // Hash da senha
-        const hashedPassword = await bcrypt.hash(password, 12);
-
-        // Criar usuário
-        const userId = await new Promise((resolve, reject) => {
-            db.run(`INSERT INTO users (email, password, name, role, is_verified) 
-                    VALUES (?, ?, ?, ?, ?)`,
-                   [email, hashedPassword, name, 'client', 1],
-                   function(err) {
-                if (err) reject(err);
-                else resolve(this.lastID);
-            });
-        });
-
-        // Gerar token JWT (365 dias para login persistente)
-        const token = jwt.sign(
-            { userId, email, name, role: 'client' },
-            JWT_SECRET,
-            { expiresIn: '365d' }
-        );
-
-        // Enviar email de boas-vindas (não bloquear se falhar)
-        sendWelcomeEmail(email, name, password).catch(console.error);
-
-        // Resposta de sucesso
-        res.status(201).json({
-            success: true,
-            message: 'Conta criada com sucesso!',
-            user: {
-                id: userId,
-                email,
-                name,
-                role: 'client'
-            },
-            token,
-            redirect: '/html/dashboard.html'
-        });
-
-        console.log('✅ Novo usuário registrado:', email);
-
-    } catch (error) {
-        console.error('❌ Erro no registro:', error.message);
-        res.status(500).json({
-            success: false,
-            message: 'Erro interno do servidor'
-        });
-    }
 });
 
-// Rota de login (aceita username ao invés de email)
+// Rota de login
 app.post('/api/auth/login', async (req, res) => {
-    const { username, password, email } = req.body;
-    
-    // Aceitar tanto 'username' quanto 'email' para retrocompatibilidade
-    const loginIdentifier = username || email;
+    const { username, password } = req.body;
 
-    if (!loginIdentifier || !password) {
+    if (!username || !password) {
         return res.status(400).json({
             success: false,
             message: 'Usuário e senha são obrigatórios'
@@ -494,9 +400,9 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     try {
-        // Buscar usuário (campo 'email' agora armazena o username)
+        // Buscar usuário
         const user = await new Promise((resolve, reject) => {
-            db.get('SELECT * FROM users WHERE email = ? AND is_active = 1', [loginIdentifier], (err, row) => {
+            db.get('SELECT * FROM users WHERE email = ? AND is_active = 1', [username], (err, row) => {
                 if (err) reject(err);
                 else resolve(row);
             });
@@ -542,7 +448,7 @@ app.post('/api/auth/login', async (req, res) => {
             redirect: '/html/dashboard.html'
         });
 
-        console.log('✅ Login realizado:', loginIdentifier);
+        console.log('✅ Login realizado:', username);
 
     } catch (error) {
         console.error('❌ Erro no login:', error.message);
@@ -774,7 +680,7 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
             data: { id: propertyId }
         });
 
-        console.log('✅ Novo imóvel criado:', propertyId, 'por', req.user.username || req.user.email);
+        console.log('✅ Novo imóvel criado:', propertyId, 'por', req.user.username);
 
     } catch (error) {
         console.error('❌ Erro ao criar imóvel:', error.message);
@@ -861,7 +767,7 @@ app.put('/api/properties/:id', authenticateToken, async (req, res) => {
             message: 'Imóvel atualizado com sucesso!'
         });
 
-        console.log('✅ Imóvel atualizado:', id, 'por', req.user.username || req.user.email);
+        console.log('✅ Imóvel atualizado:', id, 'por', req.user.username);
 
     } catch (error) {
         console.error('❌ Erro ao atualizar imóvel:', error.message);
@@ -912,7 +818,7 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
             message: 'Imóvel deletado com sucesso!'
         });
 
-        console.log('✅ Imóvel deletado:', id, 'por', req.user.username || req.user.email);
+        console.log('✅ Imóvel deletado:', id, 'por', req.user.username);
 
     } catch (error) {
         console.error('❌ Erro ao deletar imóvel:', error.message);
