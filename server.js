@@ -691,7 +691,7 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
                     opcoes_financiamento, disponibilidade, andamento_obra, previsao_entrega,
                     entrada_minima, images, video_url, virtual_tour_url, status, 
                     highlight, category, created_by
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [
                 title,                              // 1
                 description || '',                  // 2
