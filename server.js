@@ -664,6 +664,13 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
             virtual_tour_url
         } = req.body;
 
+        // Log completo dos dados recebidos
+        console.log('📥 Dados recebidos do frontend:', JSON.stringify({
+            title, description, price_type, property_type, price, 
+            bedrooms, bathrooms, parking_spaces, area, address, 
+            neighborhood, city, state, features, category, status, highlight
+        }, null, 2));
+
         // Validações
         if (!title || !price || !property_type || !category) {
             console.log('❌ Validação falhou:', { title, price, property_type, category });
@@ -686,36 +693,36 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
                     highlight, category, created_by
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [
-                title, 
-                description || '', 
-                price_type || 'sale', 
-                property_type, 
-                price, 
-                bedrooms || 0, 
-                bathrooms || 0,
-                parking_spaces || 0, 
-                area, 
-                address, 
-                neighborhood, 
-                city, 
-                state, 
-                JSON.stringify(features || []),
-                ano_construcao, 
-                iptu_mensal, 
-                condominio_mensal, 
-                situacao_imovel,
-                opcoes_financiamento, 
-                disponibilidade, 
-                andamento_obra, 
-                previsao_entrega, 
-                entrada_minima, 
-                JSON.stringify(images || []), 
-                video_url, 
-                virtual_tour_url, 
-                status, 
-                highlight ? 1 : 0, 
-                category, 
-                req.user.userId
+                title,                              // 1
+                description || '',                  // 2
+                price_type || 'sale',              // 3
+                property_type,                      // 4
+                price,                              // 5
+                bedrooms || 0,                      // 6
+                bathrooms || 0,                     // 7
+                parking_spaces || 0,                // 8
+                area || null,                       // 9
+                address || '',                      // 10
+                neighborhood || '',                 // 11
+                city,                               // 12
+                state,                              // 13
+                JSON.stringify(features || []),     // 14
+                ano_construcao || null,             // 15
+                iptu_mensal || null,                // 16
+                condominio_mensal || null,          // 17
+                situacao_imovel || null,            // 18
+                opcoes_financiamento || null,       // 19
+                disponibilidade || null,            // 20
+                andamento_obra || null,             // 21
+                previsao_entrega || null,           // 22
+                entrada_minima || null,             // 23
+                JSON.stringify(images || []),       // 24
+                video_url || null,                  // 25
+                virtual_tour_url || null,           // 26
+                status,                             // 27
+                highlight ? 1 : 0,                  // 28
+                category,                           // 29
+                req.user.userId                     // 30
             ], function(err) {
                 if (err) {
                     console.error('❌ Erro no INSERT:', err.message);
@@ -1071,7 +1078,7 @@ app.get('/api/dashboard/metrics', authenticateToken, (req, res) => {
                     // Leads reais (0 quando não há dados)
                     metrics.newLeads = 0;
                     metrics.changes.leads = '0%';
-                    metrics.changes.properties = propertiesChange >= 0 ? `+${propertiesChange}%` : `${propertiesChange}%`;
+                    metrics.changes.properties = '0%';
 
                     res.json({
                         success: true,
