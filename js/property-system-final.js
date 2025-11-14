@@ -5,9 +5,8 @@
 
 class PropertySystemFinal {
     constructor() {
-        // Detectar se está no Live Server e ajustar URL
-        const isLiveServer = window.location.port !== '3000';
-        const baseURL = isLiveServer ? 'http://localhost:3000' : '';
+        // Usar URL da API global configurada
+        const baseURL = window.API_URL || 'http://localhost:3000';
         this.apiEndpoint = baseURL + '/api/properties';
         
         this.properties = [];

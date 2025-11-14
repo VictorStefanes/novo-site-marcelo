@@ -7,7 +7,7 @@ class AuthManager {
     constructor() {
         this.sessionKey = 'marceloImoveis_session';
         this.currentUser = null;
-        this.apiUrl = 'http://localhost:3000/api/auth';
+        this.apiUrl = (window.API_URL || 'http://localhost:3000') + '/api/auth';
         
         this.init();
     }

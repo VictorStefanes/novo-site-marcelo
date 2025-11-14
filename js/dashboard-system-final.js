@@ -289,15 +289,8 @@ class DashboardSystemFinal {
     async submitProperty(propertyData) {
         const token = localStorage.getItem('token');
         
-        // Detectar se está rodando no Live Server e corrigir URL base
-        const isLiveServer = window.location.port !== '3000';
-        const baseURL = isLiveServer ? 'http://localhost:3000' : '';
-        
-        if (isLiveServer) {
-            console.warn('⚠️ ATENÇÃO: Você está usando Live Server (porta ' + window.location.port + ')');
-            console.warn('💡 Redirecionando requisições para http://localhost:3000');
-            console.warn('📌 Melhor acessar diretamente: http://localhost:3000/html/dashboard.html');
-        }
+        // Usar URL da API global configurada
+        const baseURL = window.API_URL || 'http://localhost:3000';
         
         // Primeiro tenta com autenticação
         let endpoint = '/api/properties';

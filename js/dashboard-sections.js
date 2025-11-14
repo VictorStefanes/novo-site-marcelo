@@ -126,7 +126,7 @@ class DashboardSections {
             const month = this.currentDate.getMonth() + 1;
             const year = this.currentDate.getFullYear();
             
-            const response = await fetch(`http://localhost:3000/api/appointments?month=${month}&year=${year}`, {
+            const response = await fetch(`${window.API_URL || 'http://localhost:3000'}/api/appointments?month=${month}&year=${year}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -199,7 +199,7 @@ class DashboardSections {
     async confirmAppointment(id) {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/appointments/${id}/status`, {
+            const response = await fetch(`${window.API_URL || 'http://localhost:3000'}/api/appointments/${id}/status`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ class DashboardSections {
         
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3000/api/appointments/${id}`, {
+            const response = await fetch(`${window.API_URL || 'http://localhost:3000'}/api/appointments/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

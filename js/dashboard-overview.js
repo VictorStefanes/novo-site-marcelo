@@ -29,7 +29,7 @@ class DashboardOverview {
             // Obter token do localStorage
             const token = localStorage.getItem('token');
             
-            const response = await fetch('http://localhost:3000/api/dashboard/metrics', {
+            const response = await fetch(`${window.API_URL || 'http://localhost:3000'}/api/dashboard/metrics`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -294,7 +294,7 @@ class DashboardOverview {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/api/dashboard/activities', {
+            const response = await fetch(`${window.API_URL || 'http://localhost:3000'}/api/dashboard/activities`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -347,7 +347,7 @@ class DashboardOverview {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3000/api/dashboard/top-properties', {
+            const response = await fetch(`${window.API_URL || 'http://localhost:3000'}/api/dashboard/top-properties`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
