@@ -664,20 +664,45 @@ app.post('/api/properties', authenticateToken, async (req, res) => {
         const propertyId = await new Promise((resolve, reject) => {
             db.run(`
                 INSERT INTO properties (
-                    title, description, price_type, property_type, price, bedrooms, bathrooms,
-                    parking_spaces, area, address, neighborhood, city, state, features,
+                    title, descricao, finalidade, tipo, price, quartos, suites, banheiros,
+                    vagas, area, endereco, bairro, cidade, estado, caracteristicas,
                     ano_construcao, iptu_mensal, condominio_mensal, situacao_imovel,
                     opcoes_financiamento, disponibilidade, andamento_obra, previsao_entrega,
                     entrada_minima, images, video_url, virtual_tour_url, status, 
-                    highlight, category, created_by
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    destaque, categoria, created_by
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `, [
-                title, description || '', price_type || 'sale', property_type, price, bedrooms || 0, bathrooms || 0,
-                parking_spaces || 0, area, address, neighborhood, city, state, JSON.stringify(features || []),
-                ano_construcao, iptu_mensal, condominio_mensal, situacao_imovel,
-                opcoes_financiamento, disponibilidade, andamento_obra, 
-                previsao_entrega, entrada_minima, JSON.stringify(images || []), video_url, 
-                virtual_tour_url, status, highlight ? 1 : 0, category, req.user.userId
+                title, 
+                description || '', 
+                price_type || 'sale', 
+                property_type, 
+                price, 
+                bedrooms || 0, 
+                bedrooms || 0, // suites (usar mesmo valor de bedrooms por enquanto)
+                bathrooms || 0,
+                parking_spaces || 0, 
+                area, 
+                address, 
+                neighborhood, 
+                city, 
+                state, 
+                JSON.stringify(features || []),
+                ano_construcao, 
+                iptu_mensal, 
+                condominio_mensal, 
+                situacao_imovel,
+                opcoes_financiamento, 
+                disponibilidade, 
+                andamento_obra, 
+                previsao_entrega, 
+                entrada_minima, 
+                JSON.stringify(images || []), 
+                video_url, 
+                virtual_tour_url, 
+                status, 
+                highlight ? 1 : 0, 
+                category, 
+                req.user.userId
             ], function(err) {
                 if (err) {
                     console.error('❌ Erro no INSERT:', err.message);
