@@ -1021,10 +1021,10 @@ app.get('/api/dashboard/metrics', authenticateToken, (req, res) => {
                         metrics.changes.revenue = revenueChange >= 0 ? `+${revenueChange}%` : `${revenueChange}%`;
                     }
 
-                    // Simular leads (você pode criar tabela leads futuramente)
-                    metrics.newLeads = Math.floor(Math.random() * 50) + 20;
-                    metrics.changes.leads = '+' + (Math.floor(Math.random() * 40) + 10) + '%';
-                    metrics.changes.properties = '+' + (Math.floor(Math.random() * 20) + 5) + '%';
+                    // Leads reais (0 quando não há dados)
+                    metrics.newLeads = 0;
+                    metrics.changes.leads = '0%';
+                    metrics.changes.properties = propertiesChange >= 0 ? `+${propertiesChange}%` : `${propertiesChange}%`;
 
                     res.json({
                         success: true,
@@ -1106,9 +1106,7 @@ app.get('/api/dashboard/top-properties', authenticateToken, (req, res) => {
                 price,
                 neighborhood,
                 city,
-                images,
-                RANDOM() as views,
-                RANDOM() as leads
+                images
             FROM properties 
             WHERE status = 'active'
             ORDER BY highlight DESC, created_at DESC
@@ -1136,8 +1134,8 @@ app.get('/api/dashboard/top-properties', authenticateToken, (req, res) => {
                 return {
                     title: row.title,
                     location: `${row.neighborhood}, ${row.city}`,
-                    views: Math.floor(Math.random() * 2000) + 500,
-                    leads: Math.floor(Math.random() * 50) + 10,
+                    views: 0,
+                    leads: 0,
                     price: row.price,
                     image: image
                 };
