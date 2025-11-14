@@ -159,8 +159,8 @@ class DashboardSystemFinal {
             this.form?.reset();
             
             // Reset do sistema de upload
-            if (this.imageUpload) {
-                this.imageUpload.reset();
+            if (window.imageUploadSystem) {
+                window.imageUploadSystem.clearAllImages();
             }
             
             // Configurar campos condicionais
@@ -173,9 +173,9 @@ class DashboardSystemFinal {
             this.modal.style.display = 'none';
             this.form?.reset();
             
-            // Reset do sistema de upload
-            if (this.imageUpload) {
-                this.imageUpload.reset();
+            // Reset do sistema de upload (usar clearAllImages ao invés de reset)
+            if (window.imageUploadSystem) {
+                window.imageUploadSystem.clearAllImages();
             }
         }
     }
