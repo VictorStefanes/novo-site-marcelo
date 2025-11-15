@@ -66,21 +66,26 @@ class IndexPropertyLoader {
     }
 
     createCard(property, category) {
-        // Usar nomes em inglês (novos) com fallback para português (antigos)
-        const bedrooms = property.bedrooms || property.quartos || 0;
-        const bathrooms = property.bathrooms || property.banheiros || 0;
-        const parkingSpaces = property.parking_spaces || property.vagas || 0;
-        const area = property.area || 0;
-        const neighborhood = property.neighborhood || property.bairro || '';
-        const address = property.address || property.endereco || '';
-        const city = property.city || property.cidade || 'Maceió';
+        // Mapear campos do PostgreSQL
+        const bedrooms = property.bedrooms || 0;
+        const bathrooms = property.bathrooms || 0;
+        const parkingSpaces = property.parking_spaces || 0;
+        const area = property.total_area || property.built_area || property.area || 0;
+        const neighborhood = property.neighborhood || '';
+        const address = property.address || '';
+        const city = property.city || 'Maceió';
 
+        // Processar imagens (PostgreSQL retorna array de strings)
         const images = Array.isArray(property.images) ? property.images : [];
-        const mainImage = images[0] || 'assets/images/placeholder.jpg';
-        
-        const price = property.price ? 
-            new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(property.price) : 
+        const mainImage = images.length > 0 
+            ? (typeof images[0] === 'string' ? images[0] : images[0].url || images[0].data)
+            : (property.main_image || 'assets/images/placeholder.jpg');
+        // PostgreSQL usa sale_price ou rent_price
+        const price = property.sale_price || property.rent_price || 0;
+        const priceFormatted = price > 0 ?
+            new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price) : 
             'Consulte';
+        const priceType = property.sale_price ? 'Venda' : property.rent_price ? 'Aluguel' : 'Consulte';
 
         const pageUrl = this.getCategoryPage(category);
 
@@ -122,8 +127,8 @@ class IndexPropertyLoader {
                         </div>
                     </div>
                     <div class="property-price">
-                        <h3>${price}</h3>
-                        <p class="price-type">Venda</p>
+                        <h3>${priceFormatted}</h3>
+                        <p class="price-type">${priceType}</p>
                     </div>
                     <div class="property-actions">
                         <a href="${pageUrl}?id=${property.id}" class="btn-details">
