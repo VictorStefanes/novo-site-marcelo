@@ -400,13 +400,15 @@ class DashboardSystemFinal {
 
     async loadPropertiesTable() {
         try {
-            const response = await fetch(`${window.API_URL}/api/properties`);
+            const response = await fetch(`${window.API_URL}/api/properties?limit=100`);
             
             if (!response.ok) {
                 throw new Error('Erro ao carregar imóveis');
             }
             
-            const properties = await response.json();
+            const result = await response.json();
+            // Backend PostgreSQL retorna { success, data, pagination }
+            const properties = result.data || result || [];
             this.renderPropertiesTable(properties);
             
         } catch (error) {
@@ -446,7 +448,7 @@ class DashboardSystemFinal {
                     </td>
                     <td>${property.property_type || 'N/A'}</td>
                     <td><span class="category-badge ${property.category}">${this.getCategoryLabel(property.category)}</span></td>
-                    <td><strong>${this.formatCurrency(property.price)}</strong></td>
+                    <td><strong>${this.formatCurrency(property.sale_price || property.rent_price || 0)}</strong></td>
                     <td>${property.neighborhood || 'N/A'}, ${property.city || 'N/A'}</td>
                     <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
                     <td>
@@ -486,8 +488,10 @@ class DashboardSystemFinal {
 
     getStatusClass(status) {
         const classes = {
+            'available': 'status-active',
             'active': 'status-active',
             'sold': 'status-sold',
+            'rented': 'status-sold',
             'reserved': 'status-reserved',
             'pending': 'status-pending'
         };
@@ -496,8 +500,10 @@ class DashboardSystemFinal {
 
     getStatusLabel(status) {
         const labels = {
+            'available': 'Disponível',
             'active': 'Disponível',
             'sold': 'Vendido',
+            'rented': 'Alugado',
             'reserved': 'Reservado',
             'pending': 'Em Espera'
         };
