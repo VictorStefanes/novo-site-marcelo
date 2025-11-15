@@ -278,12 +278,8 @@ class ImageUploadSystem {
         for (const image of this.selectedImages) {
             try {
                 const base64 = await this.fileToBase64(image.file);
-                base64Images.push({
-                    id: image.id,
-                    name: image.name,
-                    data: base64,
-                    type: image.file.type
-                });
+                // Enviar apenas a string Base64, não o objeto completo
+                base64Images.push(base64);
             } catch (error) {
                 console.error('❌ Erro ao converter imagem:', image.name, error);
             }
