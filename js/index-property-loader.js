@@ -66,6 +66,15 @@ class IndexPropertyLoader {
     }
 
     createCard(property, category) {
+        // Usar nomes em inglês (novos) com fallback para português (antigos)
+        const bedrooms = property.bedrooms || property.quartos || 0;
+        const bathrooms = property.bathrooms || property.banheiros || 0;
+        const parkingSpaces = property.parking_spaces || property.vagas || 0;
+        const area = property.area || 0;
+        const neighborhood = property.neighborhood || property.bairro || '';
+        const address = property.address || property.endereco || '';
+        const city = property.city || property.cidade || 'Maceió';
+
         const images = Array.isArray(property.images) ? property.images : [];
         const mainImage = images[0] || 'assets/images/placeholder.jpg';
         
@@ -76,47 +85,63 @@ class IndexPropertyLoader {
         const pageUrl = this.getCategoryPage(category);
 
         return `
-            <div class="card-imovel" data-id="${property.id}">
-                <div class="card-image-container">
-                    <img src="${mainImage}" alt="${property.title || 'Imóvel'}" class="card-image">
-                    ${images.length > 1 ? `
-                        <div class="image-counter">
-                            <i class="fas fa-camera"></i> ${images.length}
+            <div class="property-card" data-property-id="${property.id}">
+                <div class="property-image-carousel">
+                    <div class="carousel-container">
+                        <div class="carousel-slide active">
+                            <img src="${mainImage}" alt="${property.title || 'Imóvel'}" loading="lazy" 
+                                 onerror="this.src='assets/images/placeholder.jpg'">
                         </div>
-                    ` : ''}
-                </div>
-                <div class="card-content">
-                    <h3 class="card-title">${property.title || 'Imóvel sem título'}</h3>
-                    <p class="card-location">
-                        <i class="fas fa-map-marker-alt"></i> 
-                        ${property.bairro || property.endereco || 'Localização não informada'}
-                    </p>
-                    <div class="card-features">
-                        ${property.quartos ? `
-                            <span class="feature">
-                                <i class="fas fa-bed"></i> ${property.quartos} quarto${property.quartos > 1 ? 's' : ''}
-                            </span>
-                        ` : ''}
-                        ${property.banheiros ? `
-                            <span class="feature">
-                                <i class="fas fa-bath"></i> ${property.banheiros} banheiro${property.banheiros > 1 ? 's' : ''}
-                            </span>
-                        ` : ''}
-                        ${property.area ? `
-                            <span class="feature">
-                                <i class="fas fa-ruler-combined"></i> ${property.area}m²
-                            </span>
-                        ` : ''}
                     </div>
-                    <div class="card-footer">
-                        <span class="card-price">${price}</span>
-                        <a href="${pageUrl}?id=${property.id}" class="btn-detalhes">
-                            Ver Detalhes <i class="fas fa-arrow-right"></i>
+                    <div class="property-category ${category}">${this.getCategoryLabel(category)}</div>
+                </div>
+                <div class="property-content">
+                    <div class="property-title">
+                        <h3><a href="${pageUrl}?id=${property.id}">${property.title || 'Imóvel sem título'}</a></h3>
+                        <span class="property-code">Código: ${property.id}</span>
+                    </div>
+                    <div class="property-location">
+                        <p><i class="fas fa-map-marker-alt"></i> ${neighborhood || address || 'Localização não informada'}, ${city}</p>
+                    </div>
+                    <div class="property-features">
+                        <div class="feature">
+                            <i class="fas fa-bed"></i>
+                            <span>${bedrooms} ${bedrooms === 1 ? 'quarto' : 'quartos'}</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bath"></i>
+                            <span>${bathrooms} ${bathrooms === 1 ? 'banheiro' : 'banheiros'}</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-car"></i>
+                            <span>${parkingSpaces} ${parkingSpaces === 1 ? 'vaga' : 'vagas'}</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-ruler-combined"></i>
+                            <span>${area}m²</span>
+                        </div>
+                    </div>
+                    <div class="property-price">
+                        <h3>${price}</h3>
+                        <p class="price-type">Venda</p>
+                    </div>
+                    <div class="property-actions">
+                        <a href="${pageUrl}?id=${property.id}" class="btn-details">
+                            <i class="fas fa-eye"></i> Ver Detalhes
                         </a>
                     </div>
                 </div>
             </div>
         `;
+    }
+
+    getCategoryLabel(category) {
+        const labels = {
+            'lancamentos': 'Lançamento',
+            'beira-mar': 'Beira Mar',
+            'mais-procurados': 'Mais Procurado'
+        };
+        return labels[category] || 'Imóvel';
     }
 
     getCategoryPage(category) {
