@@ -306,25 +306,32 @@ class PropertySystemFinal {
         const {
             id = 'unknown',
             title = 'Propriedade sem título',
-            price = 0,
+            sale_price,
+            rent_price,
             bedrooms = 0,
             bathrooms = 0,
             parking_spaces = 0,
-            area = 0,
+            total_area,
+            area,
             neighborhood = 'Não informado',
             city = 'Maceió',
-            price_type = 'sale',
             images = [],
             category = this.currentCategory
         } = property;
+
+        // PostgreSQL usa sale_price e rent_price
+        const price = sale_price || rent_price || 0;
+        const price_type = sale_price ? 'sale' : 'rent';
+        const displayArea = total_area || area || 0;
 
         const finalidade = this.mapPriceType(price_type);
         const categoryName = this.getCategoryName(category);
 
         // Preparar imagens para o carrossel
-        const propertyImages = images && images.length > 0 ? images : [{data: '/assets/images/property-placeholder.jpg'}];
+        const propertyImages = images && images.length > 0 ? images : ['/assets/images/property-placeholder.jpg'];
         const imagesHTML = propertyImages.map((img, index) => {
-            const imgSrc = img.data || img.url || '/assets/images/property-placeholder.jpg';
+            // PostgreSQL retorna strings (Base64 ou URLs), não objetos
+            const imgSrc = typeof img === 'string' ? img : (img.data || img.url || '/assets/images/property-placeholder.jpg');
             return `
                 <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-slide="${index}">
                     <img src="${imgSrc}" alt="${title} - Foto ${index + 1}" loading="lazy" 
@@ -380,7 +387,7 @@ class PropertySystemFinal {
                         </div>
                         <div class="feature">
                             <i class="fas fa-ruler-combined"></i>
-                            <span>${area}m²</span>
+                            <span>${displayArea}m²</span>
                         </div>
                     </div>
                     <div class="property-price">

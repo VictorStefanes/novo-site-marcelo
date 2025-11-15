@@ -471,7 +471,13 @@ class DashboardSystemFinal {
 
     getPropertyImage(property) {
         if (property.images && property.images.length > 0) {
-            return property.images[0].url || '/assets/images/property-placeholder.jpg';
+            // PostgreSQL retorna array de strings (Base64 ou URLs)
+            const firstImage = property.images[0];
+            // Se for objeto com .url, usar .url; senão usar direto
+            return typeof firstImage === 'object' ? firstImage.url : firstImage;
+        }
+        if (property.main_image) {
+            return property.main_image;
         }
         return '/assets/images/property-placeholder.jpg';
     }
