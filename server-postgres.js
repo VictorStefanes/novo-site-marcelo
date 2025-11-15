@@ -11,7 +11,7 @@ const { query, getClient, closePool } = require('./database/db');
 const { initDatabase } = require('./database/migrations');
 
 // Sistema de upload de imagens
-const imageUploadSystem = require('./image-upload-server');
+const { handleImageUpload, handleImageDelete, setupStaticImages } = require('./image-upload-server');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -610,8 +610,10 @@ app.delete('/api/properties/:id', authenticateToken, async (req, res) => {
 // ROTAS DE UPLOAD DE IMAGENS
 // ========================================
 
-// Integrar sistema de upload de imagens existente
-imageUploadSystem(app);
+// Configurar rotas de upload
+setupStaticImages(app);
+app.post('/api/upload/images', authenticateToken, handleImageUpload);
+app.delete('/api/upload/images/:filename', authenticateToken, handleImageDelete);
 
 // ========================================
 // INICIALIZAÇÃO DO SERVIDOR
