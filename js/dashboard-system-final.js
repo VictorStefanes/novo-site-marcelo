@@ -201,36 +201,34 @@ class DashboardSystemFinal {
             const rawData = Object.fromEntries(formData.entries());
             console.log('📋 Dados brutos do formulário:', rawData);
 
-            // Mapear campos do formulário para estrutura do banco (inglês)
+            // Mapear campos do formulário para estrutura do banco (PostgreSQL)
+            const price = parseFloat(rawData.price);
+            const priceType = rawData.finalidade === 'Venda' ? 'sale' : rawData.finalidade === 'Aluguel' ? 'rent' : 'vacation';
+            
             const propertyData = {
                 title: rawData.title,
                 description: rawData.descricao || '',
-                price: parseFloat(rawData.price),
+                // Mapear price para sale_price ou rent_price baseado na finalidade
+                sale_price: priceType === 'sale' ? price : null,
+                rent_price: priceType === 'rent' || priceType === 'vacation' ? price : null,
                 property_type: rawData.tipo,
-                price_type: rawData.finalidade === 'Venda' ? 'sale' : rawData.finalidade === 'Aluguel' ? 'rent' : 'vacation',
                 category: rawData.categoria,
                 bedrooms: parseInt(rawData.quartos) || 0,
                 bathrooms: parseInt(rawData.banheiros) || 0,
                 parking_spaces: parseInt(rawData.vagas) || 0,
-                area: parseFloat(rawData.area) || null,
+                total_area: parseFloat(rawData.area) || null,
                 address: rawData.endereco,
                 neighborhood: rawData.bairro,
                 city: rawData.cidade || 'Maceió',
                 state: rawData.estado || 'AL',
-                status: rawData.status === 'disponivel' ? 'active' : rawData.status,
-                highlight: rawData.destaque === 'true' || rawData.destaque === '1' ? 1 : 0,
-                // Campos adicionais
-                ano_construcao: parseInt(rawData.ano_construcao) || null,
-                iptu_mensal: parseFloat(rawData.iptu_mensal) || null,
-                condominio_mensal: parseFloat(rawData.condominio_mensal) || null,
-                situacao_imovel: rawData.situacao_imovel,
-                opcoes_financiamento: rawData.opcoes_financiamento,
-                disponibilidade: rawData.disponibilidade,
-                andamento_obra: rawData.andamento_obra,
-                previsao_entrega: rawData.previsao_entrega,
-                entrada_minima: parseFloat(rawData.entrada_minima) || null,
-                video_url: rawData.video_url,
-                virtual_tour_url: rawData.virtual_tour_url
+                status: rawData.status === 'disponivel' ? 'available' : rawData.status,
+                is_featured: rawData.destaque === 'true' || rawData.destaque === '1' ? true : false,
+                // Campos financeiros adicionais (PostgreSQL)
+                condo_fee: parseFloat(rawData.condominio_mensal) || null,
+                iptu: parseFloat(rawData.iptu_mensal) || null,
+                // Mídia
+                video_url: rawData.video_url || null,
+                virtual_tour_url: rawData.virtual_tour_url || null
             };
 
             // Adicionar imagens do sistema de upload (converter para base64)
@@ -254,10 +252,12 @@ class DashboardSystemFinal {
             console.log('📤 Enviando dados:', propertyData);
 
             // Validar campos obrigatórios
-            if (!propertyData.title || !propertyData.price || !propertyData.property_type || !propertyData.category) {
+            const hasPrice = propertyData.sale_price || propertyData.rent_price;
+            if (!propertyData.title || !hasPrice || !propertyData.property_type || !propertyData.category) {
                 console.error('❌ Validação falhou - campos obrigatórios faltando:', {
                     title: propertyData.title,
-                    price: propertyData.price,
+                    sale_price: propertyData.sale_price,
+                    rent_price: propertyData.rent_price,
                     property_type: propertyData.property_type,
                     category: propertyData.category
                 });
