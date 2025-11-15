@@ -1,31 +1,27 @@
 /* ========================================
-   SISTEMA DE CARREGAMENTO PARA INDEX.HTML
-   Carrega os 5 imóveis mais recentes por categoria
+   CARREGADOR DE IMÓVEIS PARA INDEX
+   Carrega 5 imóveis mais recentes por categoria
+   Estrutura IDÊNTICA às páginas de categoria
 ======================================== */
 
 class IndexPropertyLoader {
     constructor() {
-        this.apiUrl = (window.API_URL || 'http://localhost:3000') + '/api/properties/home';
-        this.init();
-    }
-
-    async init() {
-        try {
-            await this.loadProperties();
-        } catch (error) {
-            console.error('❌ Erro ao inicializar:', error);
-        }
+        this.apiUrl = window.API_URL || 'http://localhost:3000';
+        this.loadProperties();
     }
 
     async loadProperties() {
         try {
-            const response = await fetch(this.apiUrl);
+            console.log('🔄 Carregando imóveis para index...');
+            
+            const response = await fetch(`${this.apiUrl}/api/properties/home`);
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }
-
+            
             const data = await response.json();
+            console.log('📦 Dados recebidos:', data);
             
             // data = { lancamentos: [...], 'beira-mar': [...], 'mais-procurados': [...] }
             this.renderCategory('lancamentos', data.lancamentos || [], '.lancamentos-cards');
@@ -66,47 +62,66 @@ class IndexPropertyLoader {
     }
 
     createCard(property, category) {
-        // Mapear campos do PostgreSQL
+        // Mapear campos do PostgreSQL (IDÊNTICO às páginas de categoria)
+        const id = property.id || 'unknown';
+        const title = property.title || 'Imóvel sem título';
         const bedrooms = property.bedrooms || 0;
         const bathrooms = property.bathrooms || 0;
         const parkingSpaces = property.parking_spaces || 0;
-        const area = property.total_area || property.built_area || property.area || 0;
+        const displayArea = property.total_area || property.built_area || property.area || 0;
         const neighborhood = property.neighborhood || '';
-        const address = property.address || '';
         const city = property.city || 'Maceió';
 
-        // Processar imagens (PostgreSQL retorna array de strings)
-        const images = Array.isArray(property.images) ? property.images : [];
-        const mainImage = images.length > 0 
-            ? (typeof images[0] === 'string' ? images[0] : images[0].url || images[0].data)
-            : (property.main_image || 'assets/images/placeholder.jpg');
         // PostgreSQL usa sale_price ou rent_price
         const price = property.sale_price || property.rent_price || 0;
-        const priceFormatted = price > 0 ?
-            new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price) : 
-            'Consulte';
-        const priceType = property.sale_price ? 'Venda' : property.rent_price ? 'Aluguel' : 'Consulte';
+        const priceType = property.sale_price ? 'Venda' : 'Aluguel';
 
+        // Preparar imagens para o carrossel (IGUAL às páginas)
+        const propertyImages = property.images && property.images.length > 0 ? property.images : ['assets/images/property-placeholder.jpg'];
+        const imagesHTML = propertyImages.map((img, index) => {
+            const imgSrc = typeof img === 'string' ? img : (img.data || img.url || 'assets/images/property-placeholder.jpg');
+            return `
+                <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-slide="${index}">
+                    <img src="${imgSrc}" alt="${title} - Foto ${index + 1}" loading="lazy" 
+                         onerror="this.src='assets/images/property-placeholder.jpg'">
+                </div>
+            `;
+        }).join('');
+
+        // Controles do carrossel (só se houver mais de 1 imagem)
+        const carouselControls = propertyImages.length > 1 ? `
+            <button class="carousel-btn carousel-prev" onclick="event.stopPropagation(); window.indexPropertyLoader.prevSlide(${id})">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn carousel-next" onclick="event.stopPropagation(); window.indexPropertyLoader.nextSlide(${id})">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="carousel-indicators">
+                ${propertyImages.map((_, index) => `
+                    <span class="indicator ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>
+                `).join('')}
+            </div>
+        ` : '';
+
+        const categoryName = this.getCategoryLabel(category);
         const pageUrl = this.getCategoryPage(category);
 
         return `
-            <div class="property-card" data-property-id="${property.id}">
+            <div class="property-card" data-property-id="${id}">
                 <div class="property-image-carousel">
                     <div class="carousel-container">
-                        <div class="carousel-slide active">
-                            <img src="${mainImage}" alt="${property.title || 'Imóvel'}" loading="lazy" 
-                                 onerror="this.src='assets/images/placeholder.jpg'">
-                        </div>
+                        ${imagesHTML}
                     </div>
-                    <div class="property-category ${category}">${this.getCategoryLabel(category)}</div>
+                    ${carouselControls}
+                    <div class="property-category ${category}">${categoryName}</div>
                 </div>
                 <div class="property-content">
                     <div class="property-title">
-                        <h3><a href="${pageUrl}?id=${property.id}">${property.title || 'Imóvel sem título'}</a></h3>
-                        <span class="property-code">Código: ${property.id}</span>
+                        <h3><a href="${pageUrl}?id=${id}" class="property-link">${title}</a></h3>
+                        <span class="property-code">Código: ${id}</span>
                     </div>
                     <div class="property-location">
-                        <p><i class="fas fa-map-marker-alt"></i> ${neighborhood || address || 'Localização não informada'}, ${city}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> ${neighborhood}, ${city}</p>
                     </div>
                     <div class="property-features">
                         <div class="feature">
@@ -123,21 +138,69 @@ class IndexPropertyLoader {
                         </div>
                         <div class="feature">
                             <i class="fas fa-ruler-combined"></i>
-                            <span>${area}m²</span>
+                            <span>${displayArea}m²</span>
                         </div>
                     </div>
                     <div class="property-price">
-                        <h3>${priceFormatted}</h3>
+                        <h3>${this.formatCurrency(price)}</h3>
                         <p class="price-type">${priceType}</p>
                     </div>
                     <div class="property-actions">
-                        <a href="${pageUrl}?id=${property.id}" class="btn-details">
+                        <button class="btn-details" onclick="window.location.href='${pageUrl}?id=${id}'">
                             <i class="fas fa-eye"></i> Ver Detalhes
-                        </a>
+                        </button>
+                        <button class="btn-contact" onclick="contactProperty(${id})">
+                            <i class="fab fa-whatsapp"></i> Contatar
+                        </button>
+                        <button class="btn-favorite" onclick="toggleFavorite(${id})">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         `;
+    }
+
+    // Métodos para controlar carrossel no index (igual às páginas)
+    prevSlide(propertyId) {
+        const card = document.querySelector(`[data-property-id="${propertyId}"]`);
+        if (!card) return;
+
+        const slides = card.querySelectorAll('.carousel-slide');
+        const indicators = card.querySelectorAll('.indicator');
+        let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+
+        slides[currentIndex].classList.remove('active');
+        if (indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
+
+        currentIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
+
+        slides[currentIndex].classList.add('active');
+        if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+    }
+
+    nextSlide(propertyId) {
+        const card = document.querySelector(`[data-property-id="${propertyId}"]`);
+        if (!card) return;
+
+        const slides = card.querySelectorAll('.carousel-slide');
+        const indicators = card.querySelectorAll('.indicator');
+        let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
+
+        slides[currentIndex].classList.remove('active');
+        if (indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
+
+        currentIndex = currentIndex === slides.length - 1 ? 0 : currentIndex + 1;
+
+        slides[currentIndex].classList.add('active');
+        if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+    }
+
+    formatCurrency(value) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value || 0);
     }
 
     getCategoryLabel(category) {
