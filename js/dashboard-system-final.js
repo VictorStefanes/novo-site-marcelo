@@ -309,9 +309,8 @@ class DashboardSystemFinal {
             headers['Authorization'] = `Bearer ${token}`;
             console.log('🔑 Usando autenticação');
         } else {
-            // Se não tem token, usa endpoint de desenvolvimento
-            endpoint = '/api/dev/properties';
-            console.log('🔓 Usando endpoint de desenvolvimento (sem token)');
+            console.error('❌ Token não encontrado! Faça login novamente.');
+            throw new Error('Sessão expirada. Faça login novamente.');
         }
 
         const fullURL = baseURL + endpoint;
