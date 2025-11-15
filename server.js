@@ -33,35 +33,33 @@ app.use(helmet({
     }
 }));
 
-// Permitir origins do Netlify e localhost
+// Configuração CORS segura e profissional
 const allowedOrigins = [
+    'https://corretormarcelo.netlify.app',
     'http://localhost:3000',
-    'http://127.0.0.1:3000',
     'http://localhost:5500',
-    'http://127.0.0.1:5500',
-    'file://',
-    process.env.FRONTEND_URL || 'https://seu-site.netlify.app'
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5500'
 ];
 
 app.use(cors({
     origin: function(origin, callback) {
-        // Permitir requisições sem origin (mobile apps, curl, etc)
+        // Permitir requisições sem origin (Postman, mobile apps)
         if (!origin) return callback(null, true);
         
-        // Permitir qualquer subdomínio do netlify em desenvolvimento
-        if (origin.includes('netlify.app') || origin.includes('localhost')) {
+        // Verificar se a origin está na lista permitida
+        if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
         
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Não permitido pelo CORS'));
-        }
+        // Rejeitar outras origins
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Length', 'Content-Type'],
+    maxAge: 86400 // Cache preflight por 24h
 }));
 
 // Rate limiting
