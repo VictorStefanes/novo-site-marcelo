@@ -555,12 +555,12 @@ app.get('/api/properties/home', async (req, res) => {
         for (const category of categories) {
             const query = `
                 SELECT * FROM properties 
-                WHERE categoria = ? AND status = 'disponivel'
+                WHERE (categoria = ? OR category = ?) AND status IN ('disponivel', 'active')
                 ORDER BY created_at DESC 
                 LIMIT 5
             `;
             const properties = await new Promise((resolve, reject) => {
-                db.all(query, [category], (err, rows) => {
+                db.all(query, [category, category], (err, rows) => {
                     if (err) reject(err);
                     else resolve(rows || []);
                 });
