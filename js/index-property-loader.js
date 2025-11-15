@@ -1,18 +1,18 @@
 /* ========================================
-   CARREGADOR DE IMÓVEIS PARA INDEX
-   Carrega 5 imóveis mais recentes por categoria
+   INDEX PROPERTY LOADER
+   Carrega imóveis no index.html
    Estrutura IDÊNTICA às páginas de categoria
 ======================================== */
 
 class IndexPropertyLoader {
     constructor() {
         this.apiUrl = window.API_URL || 'http://localhost:3000';
-        this.loadProperties();
+        this.init();
     }
 
-    async loadProperties() {
+    async init() {
         try {
-            console.log('🔄 Carregando imóveis para index...');
+            console.log('🔄 Carregando imóveis para o index...');
             
             const response = await fetch(`${this.apiUrl}/api/properties/home`);
             
@@ -62,8 +62,8 @@ class IndexPropertyLoader {
     }
 
     createCard(property, category) {
-        // Mapear campos do PostgreSQL (IDÊNTICO às páginas de categoria)
-        const id = property.id || 'unknown';
+        // Mapear campos do PostgreSQL (IDÊNTICO às páginas)
+        const id = property.id;
         const title = property.title || 'Imóvel sem título';
         const bedrooms = property.bedrooms || 0;
         const bathrooms = property.bathrooms || 0;
@@ -74,21 +74,24 @@ class IndexPropertyLoader {
 
         // PostgreSQL usa sale_price ou rent_price
         const price = property.sale_price || property.rent_price || 0;
-        const priceType = property.sale_price ? 'Venda' : 'Aluguel';
+        const finalidade = property.sale_price ? 'Venda' : property.rent_price ? 'Aluguel' : 'Consulte';
+        
+        const categoryName = this.getCategoryLabel(category);
+        const pageUrl = this.getCategoryPage(category);
 
-        // Preparar imagens para o carrossel (IGUAL às páginas)
-        const propertyImages = property.images && property.images.length > 0 ? property.images : ['assets/images/property-placeholder.jpg'];
+        // Processar imagens (IDÊNTICO às páginas)
+        const propertyImages = property.images && property.images.length > 0 ? property.images : ['/assets/images/property-placeholder.jpg'];
         const imagesHTML = propertyImages.map((img, index) => {
-            const imgSrc = typeof img === 'string' ? img : (img.data || img.url || 'assets/images/property-placeholder.jpg');
+            const imgSrc = typeof img === 'string' ? img : (img.data || img.url || '/assets/images/property-placeholder.jpg');
             return `
                 <div class="carousel-slide ${index === 0 ? 'active' : ''}" data-slide="${index}">
                     <img src="${imgSrc}" alt="${title} - Foto ${index + 1}" loading="lazy" 
-                         onerror="this.src='assets/images/property-placeholder.jpg'">
+                         onerror="this.src='/assets/images/property-placeholder.jpg'">
                 </div>
             `;
         }).join('');
 
-        // Controles do carrossel (só se houver mais de 1 imagem)
+        // Controles do carrossel (só aparecem se houver mais de 1 imagem)
         const carouselControls = propertyImages.length > 1 ? `
             <button class="carousel-btn carousel-prev" onclick="event.stopPropagation(); window.indexPropertyLoader.prevSlide(${id})">
                 <i class="fas fa-chevron-left"></i>
@@ -103,9 +106,7 @@ class IndexPropertyLoader {
             </div>
         ` : '';
 
-        const categoryName = this.getCategoryLabel(category);
-        const pageUrl = this.getCategoryPage(category);
-
+        // Estrutura IDÊNTICA às páginas de categoria
         return `
             <div class="property-card" data-property-id="${id}">
                 <div class="property-image-carousel">
@@ -143,7 +144,7 @@ class IndexPropertyLoader {
                     </div>
                     <div class="property-price">
                         <h3>${this.formatCurrency(price)}</h3>
-                        <p class="price-type">${priceType}</p>
+                        <p class="price-type">${finalidade}</p>
                     </div>
                     <div class="property-actions">
                         <button class="btn-details" onclick="window.location.href='${pageUrl}?id=${id}'">
@@ -161,7 +162,7 @@ class IndexPropertyLoader {
         `;
     }
 
-    // Métodos para controlar carrossel no index (igual às páginas)
+    // Funções de carrossel (IDÊNTICAS às páginas)
     prevSlide(propertyId) {
         const card = document.querySelector(`[data-property-id="${propertyId}"]`);
         if (!card) return;
@@ -169,14 +170,14 @@ class IndexPropertyLoader {
         const slides = card.querySelectorAll('.carousel-slide');
         const indicators = card.querySelectorAll('.indicator');
         let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
-
+        
         slides[currentIndex].classList.remove('active');
-        if (indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
-
-        currentIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
-
+        indicators[currentIndex].classList.remove('active');
+        
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        
         slides[currentIndex].classList.add('active');
-        if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+        indicators[currentIndex].classList.add('active');
     }
 
     nextSlide(propertyId) {
@@ -186,14 +187,14 @@ class IndexPropertyLoader {
         const slides = card.querySelectorAll('.carousel-slide');
         const indicators = card.querySelectorAll('.indicator');
         let currentIndex = Array.from(slides).findIndex(slide => slide.classList.contains('active'));
-
+        
         slides[currentIndex].classList.remove('active');
-        if (indicators[currentIndex]) indicators[currentIndex].classList.remove('active');
-
-        currentIndex = currentIndex === slides.length - 1 ? 0 : currentIndex + 1;
-
+        indicators[currentIndex].classList.remove('active');
+        
+        currentIndex = (currentIndex + 1) % slides.length;
+        
         slides[currentIndex].classList.add('active');
-        if (indicators[currentIndex]) indicators[currentIndex].classList.add('active');
+        indicators[currentIndex].classList.add('active');
     }
 
     formatCurrency(value) {
