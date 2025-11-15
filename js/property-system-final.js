@@ -69,7 +69,11 @@ class PropertySystemFinal {
                 throw new Error(`HTTP ${response.status}`);
             }
             
-            this.properties = await response.json() || [];
+            const result = await response.json();
+            
+            // Backend PostgreSQL retorna { success, data, pagination }
+            // Extrair array de properties
+            this.properties = result.data || result || [];
             this.filteredProperties = [...this.properties];
             
 
