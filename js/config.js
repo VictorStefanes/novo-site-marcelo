@@ -7,10 +7,8 @@ const isDevelopment = window.location.hostname === 'localhost' ||
                       window.location.hostname === '127.0.0.1' ||
                       window.location.hostname === '192.168.1.1';
 
-// URL da API baseada no ambiente
-const API_URL = isDevelopment 
-    ? 'http://localhost:3000'  // Desenvolvimento local
-    : 'https://marcelo-imoveis-backend-x70k.onrender.com';  // Backend no Render (PostgreSQL)
+// URL da API - SEMPRE USAR RENDER (você não tem PostgreSQL local instalado)
+const API_URL = 'https://marcelo-imoveis-backend-x70k.onrender.com';
 
 // Configuração de debug
 const DEBUG_MODE = isDevelopment;
