@@ -431,42 +431,8 @@ class DashboardSystemFinal {
 
         if (emptyState) emptyState.style.display = 'none';
 
-        tbody.innerHTML = properties.map(property => {
-            const statusClass = this.getStatusClass(property.status);
-            const statusLabel = this.getStatusLabel(property.status);
-            
-            return `
-                <tr data-property-id="${property.id}">
-                    <td>
-                        <div class="property-info">
-                            <img src="${this.getPropertyImage(property)}" alt="${property.title}" class="property-thumb">
-                            <div>
-                                <strong>${property.title}</strong>
-                                <small>Cód: ${property.id}</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${property.property_type || 'N/A'}</td>
-                    <td><span class="category-badge ${property.category}">${this.getCategoryLabel(property.category)}</span></td>
-                    <td><strong>${this.formatCurrency(property.sale_price || property.rent_price || 0)}</strong></td>
-                    <td>${property.neighborhood || 'N/A'}, ${property.city || 'N/A'}</td>
-                    <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn-action btn-edit" onclick="window.dashboardSystem.editProperty(${property.id})" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-action btn-status" onclick="window.dashboardSystem.togglePropertyStatus(${property.id})" title="Mudar Status">
-                                <i class="fas fa-toggle-on"></i>
-                            </button>
-                            <button class="btn-action btn-delete" onclick="window.dashboardSystem.deleteProperty(${property.id})" title="Excluir">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }).join('');
+        // TABELA LIMPA - LINHAS SERÃO RECRIADAS DO ZERO
+        tbody.innerHTML = '';
     }
 
     getPropertyImage(property) {
