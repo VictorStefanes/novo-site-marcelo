@@ -7,7 +7,8 @@ const isDevelopment = window.location.hostname === 'localhost' ||
                       window.location.hostname === '127.0.0.1' ||
                       window.location.hostname === '192.168.1.1';
 
-// URL da API - SEMPRE USAR RENDER (você não tem PostgreSQL local instalado)
+// URL DA API - SEMPRE USAR RENDER (PRODUÇÃO)
+// Backend já está configurado, rodando e com PostgreSQL funcionando
 const API_URL = 'https://marcelo-imoveis-backend-x70k.onrender.com';
 
 // Configuração de debug
